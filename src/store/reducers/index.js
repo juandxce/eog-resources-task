@@ -3,5 +3,5 @@ import { metricsReducer } from './MetricsReducer';
 
 export default {
   weather: weatherReducer,
-  dashboard: metricsReducer,
+  metrics: metricsReducer,
 };

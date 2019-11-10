@@ -9,7 +9,6 @@ export const getSelectedMetrics = (state: any) => {
 };
 
 export const metricsReducer = (state: any = initialState, action: any) => {
-  console.log('running MetricsReducer', action);
 
   switch (action.type) {
     case RECEIVED_CHART_METRICS:
@@ -17,8 +16,13 @@ export const metricsReducer = (state: any = initialState, action: any) => {
         chartMetrics: action.payload,
       });
     case RECEIVED_METRICS_TAGS:
+      const hasMetrics = Object.keys(state.metrics || {}).length;
+      const metrics = hasMetrics ? state.metrics : action.payload.reduce((o: any, k: any) => ({...o, [k]: {}}), {});
+      console.log('MET', metrics);
+
       const newstate =  Object.assign({}, state, {
         chartTags: action.payload,
+        metrics,
       });
       console.log('NS,', newstate);
 
@@ -26,6 +30,4 @@ export const metricsReducer = (state: any = initialState, action: any) => {
     default:
       return state
   }
-
-  return state
 }

@@ -26,7 +26,7 @@ const Dashboard = (props: any) => {
     });
   }, []);
   console.log('WAWW', props);
-  
+
   return (
     <div className={classes.card}>
       {props.chartTags && props.chartTags[0]}
@@ -37,9 +37,9 @@ const Dashboard = (props: any) => {
 };
 
 const mapStateToProps = (state: any) => ({
-  chartTags: state.dashboard.chartTags,
-  metrics: state.dashboard.metrics,
-  chart: state.dashboard .chart,
+  chartTags: state.metrics.chartTags,
+  metrics: state.metrics.metrics,
+  chart: state.metrics.chart,
   // activeMetrics: getSelectedMetrics(state)
 });
 
