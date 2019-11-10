@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { getMetricTags } from '../../store/API/metrics';
 
 const useStyles = makeStyles({
   card: {
@@ -10,10 +9,6 @@ const useStyles = makeStyles({
 
 export default () => {
   const classes = useStyles();
-  useEffect(() => {
-    console.log('mounted');
-    getMetricTags();
-  }, []);
 
   return (
     <div className={classes.card}>
