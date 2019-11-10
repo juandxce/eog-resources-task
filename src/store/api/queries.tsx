@@ -6,7 +6,6 @@ query($metricName: String! $after: Timestamp!) {
     metric,
     measurements {
       at,
-      metric,
       unit
       value,
     }

@@ -1,6 +1,9 @@
 import { RECEIVED_METRICS_TAGS, RECEIVED_CHART_METRICS } from '../actions';
 
-const initialState = {};
+const initialState = {
+  metrics: {},
+  colors: ['red', 'blue', 'pink', 'orange', 'yellow', 'green', 'purple'],
+};
 
 
 export const getSelectedMetrics = (state: any) => {
@@ -12,6 +15,14 @@ export const metricsReducer = (state: any = initialState, action: any) => {
 
   switch (action.type) {
     case RECEIVED_CHART_METRICS:
+      return Object.assign({}, state, {
+        chartMetrics: action.payload,
+      });
+    case 'RECEIVED_METRICS_INITIAL_LOAD':
+      return Object.assign({}, state, {
+        allMetrics: action.payload,
+      });
+    case 'RECEIVED_CHART_METRICS':
       return Object.assign({}, state, {
         chartMetrics: action.payload,
       });

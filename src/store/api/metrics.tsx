@@ -26,9 +26,9 @@ export const getMetricData = async (metricName: any, after: any) => {
   };
 
   const { data } = await Client.query(params);
-  console.log('get{ data }', data.getMultipleMeasurements);
+  console.log('get{ data }', data.getMultipleMeasurements[0]);
 
-  return data.getMultipleMeasurements;
+  return data.getMultipleMeasurements[0];
 }
 
 export default Client;

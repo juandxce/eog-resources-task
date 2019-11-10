@@ -26,7 +26,32 @@ const Dashboard = (props: any) => {
       const after = new Date();
       after.setMinutes(after.getMinutes() - 30);
 
-      getMetricData(getMetrics[1], after.getTime());
+      Promise.all(getMetrics.map((key: any) => {
+
+        return getMetricData(key, after.getTime());
+      })).then((allData: any) => {
+        console.log('AD', allData);
+        props.dispatch({ type: 'RECEIVED_METRICS_INITIAL_LOAD', payload: allData });
+
+        const formattedData: any = [];
+
+        for (let metric of allData) {
+          let container: any = {};
+          for (let i = 0; i < metric.measurements.length; i++) {
+            const measure = metric.measurements[i];
+            if(!formattedData[i]) {
+              formattedData[i] = {};
+            }
+            formattedData[i][metric.metric] = measure.value;
+            if (!container.at) {
+              container['at'] = measure.at;
+            }
+          }
+        }
+        console.log('FEFEEF', formattedData);
+
+        props.dispatch({ type: 'RECEIVED_CHART_METRICS', payload: formattedData });
+      })
     });
   }, []);
   console.log('WAWW', props);
@@ -35,17 +60,23 @@ const Dashboard = (props: any) => {
     <div className={classes.card}>
       {props.chartTags && props.chartTags[0]}
       <Sidebar />
-      <Chart />
+      <Chart colors={props.colors} activeTags={props.metrics} chartData={props.chartMetrics} />
     </div>
   );
 };
 
-const mapStateToProps = (state: any) => ({
-  chartTags: state.metrics.chartTags,
-  metrics: state.metrics.metrics,
-  chart: state.metrics.chart,
-  // activeMetrics: getSelectedMetrics(state)
-});
+const mapStateToProps = (state: any) => {
+  console.log('APP STATE,', state);
+  
+  return ({
+    chartTags: state.metrics.chartTags,
+    chartMetrics: state.metrics.chartMetrics,
+    metrics: state.metrics.metrics,
+    chart: state.metrics.chart,
+    colors: state.metrics.colors,
+    // activeMetrics: getSelectedMetrics(state)
+  })
+};
 
 
 const ConnectedDashboard = connect(
