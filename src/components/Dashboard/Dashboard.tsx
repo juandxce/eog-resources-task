@@ -5,7 +5,7 @@ import Sidebar from '../Sidebar/Sidebar';
 import Chart from '../Chart/Chart';
 import { connect } from 'react-redux';
 import { getSelectedMetrics } from '../../store/reducers/MetricsReducer'
-import { getMetricTags } from '../../store/api/metrics';
+import { getMetricTags, getMetricData } from '../../store/api/metrics';
 import { RECEIVED_METRICS_TAGS } from '../../store/actions';
 
 const useStyles = makeStyles({
@@ -23,6 +23,10 @@ const Dashboard = (props: any) => {
       console.log('metricTags2', data);
       const { getMetrics } = data;
       props.dispatch({ type: RECEIVED_METRICS_TAGS, payload: getMetrics });
+      const after = new Date();
+      after.setMinutes(after.getMinutes() - 30);
+
+      getMetricData(getMetrics[1], after.getTime());
     });
   }, []);
   console.log('WAWW', props);

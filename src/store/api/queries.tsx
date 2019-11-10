@@ -1,17 +1,17 @@
 import gql from 'graphql-tag';
 
 export const getPastMetricsQuery = gql`
-  query($metricName: String! $after: Timestamp!) {
-    getMultipleMeasurements(input: {metricName: $metricName after: $after}) {
+query($metricName: String! $after: Timestamp!) {
+  getMultipleMeasurements(input: {metricName: $metricName after: $after}) {
+    metric,
+    measurements {
+      at,
       metric,
-      measurements {
-        at,
-        metric,
-        unit
-        value,
-      }
+      unit
+      value,
     }
-  }`;
+  }
+}`;
 
 export const getLastMeasurementQuery = gql`
 query($metricName: String!) {

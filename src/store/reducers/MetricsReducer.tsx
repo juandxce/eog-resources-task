@@ -17,7 +17,7 @@ export const metricsReducer = (state: any = initialState, action: any) => {
       });
     case RECEIVED_METRICS_TAGS:
       const hasMetrics = Object.keys(state.metrics || {}).length;
-      const metrics = hasMetrics ? state.metrics : action.payload.reduce((o: any, k: any) => ({...o, [k]: {}}), {});
+      const metrics = hasMetrics ? state.metrics : action.payload.reduce((o: any, k: any) => ({...o, [k]: {active: true}}), {});
       console.log('MET', metrics);
 
       const newstate =  Object.assign({}, state, {

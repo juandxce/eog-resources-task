@@ -7,6 +7,7 @@ const Client = new ApolloClient({
 
 
 export const getMetricTags = async () => {
+
   const params = {
     query: getMetricsQuery
   };
@@ -17,5 +18,17 @@ export const getMetricTags = async () => {
   return metricTags;
 }
 
+
+export const getMetricData = async (metricName: any, after: any) => {
+  const params = {
+    query: getPastMetricsQuery,
+    variables: { metricName, after }
+  };
+
+  const { data } = await Client.query(params);
+  console.log('get{ data }', data.getMultipleMeasurements);
+
+  return data.getMultipleMeasurements;
+}
 
 export default Client;
