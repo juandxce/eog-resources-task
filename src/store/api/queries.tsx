@@ -6,18 +6,17 @@ query($metricName: String! $after: Timestamp!) {
     metric,
     measurements {
       at,
-      unit,
       value,
     }
   }
 }`;
 
-export const getLastMeasurementQuery = gql`
+export const getLastKnownMeasurementQuery = gql`
 query($metricName: String!) {
   getLastKnownMeasurement(metricName: $metricName) {
-    at,
     metric,
     value,
+    unit,
   }
 }`;
 

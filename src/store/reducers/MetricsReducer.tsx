@@ -1,4 +1,4 @@
-import { RECEIVED_METRICS_TAGS, TOGGLE_SELECTED_METRIC } from '../actions';
+import { RECEIVED_METRICS_TAGS, TOGGLE_SELECTED_METRIC, RECEIVED_METRICS_LAST_MEASUREMENTS } from '../actions';
 
 const initialState = {};
 
@@ -18,6 +18,17 @@ export const metricsReducer = (state: any = initialState, action: any) => {
         toggledTagState[action.payload].active = !toggledTagState[action.payload].active;
 
       return toggledTagState;
+
+        case RECEIVED_METRICS_LAST_MEASUREMENTS:
+        const changedMetricUnitState = Object.assign({}, state);
+          action.payload.map((lastMeasurement: any) => {
+            if(changedMetricUnitState[lastMeasurement.metric].unit !== lastMeasurement.unit) {
+              changedMetricUnitState[lastMeasurement.metric].unit = lastMeasurement.unit;
+              changedMetricUnitState[lastMeasurement.metric].value = lastMeasurement.value;
+            }
+          })
+          return changedMetricUnitState;
+
       default:
         return state;
   }

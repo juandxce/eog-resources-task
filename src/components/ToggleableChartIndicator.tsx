@@ -16,13 +16,15 @@ const useStyles = makeStyles({
 });
 
 export const ToggleableChartIndicator = (props: any) => {
+  console.log('props in buttons', props);
+  
   const classes = useStyles();
   return (
     <div style={{background: props.background, opacity: props.active? '1': '.3'}} onClick={() => {
       props.dispatch({type: TOGGLE_SELECTED_METRIC, payload: props.label})
     }} className={classes.card}>
       <span>{props.label}</span>
-      <span>{props.value}</span>
+      <span>{props.value}{props.unit}</span>
       <span>{props.active}</span>
     </div>
   );

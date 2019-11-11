@@ -21,7 +21,7 @@ export default (props: any) => {
         <XAxis label={{ value: 'time' }} dataKey="at" interval="preserveStartEnd" minTickGap={20} />
         <Tooltip content={<ChartTooltip />} />
         <Legend />
-        {props.activeTags && Object.keys(props.activeTags).map((metric: any, index: number) => (
+        {props.metrics && Object.keys(props.metrics).map((metric: any, index: number) => (
         <Line type="monotone" dot={false} key={metric} dataKey={metric} stroke={props.colors[index] || 'orange'} />
         ))}
       </LineChart>

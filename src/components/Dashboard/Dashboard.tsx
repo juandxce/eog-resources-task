@@ -4,8 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Sidebar from '../Sidebar/Sidebar';
 import Chart from '../Chart/Chart';
 import { connect } from 'react-redux';
-import { getMetricTags, getMetricData } from '../../store/api/metrics';
-import { RECEIVED_METRICS_TAGS, RECEIVED_CHART_METRICS } from '../../store/actions';
+import { getMetricTags, getMetricData, getLastKnownMeasurement } from '../../store/api/metrics';
+import { RECEIVED_METRICS_TAGS, RECEIVED_CHART_METRICS, RECEIVED_METRICS_LAST_MEASUREMENTS } from '../../store/actions';
 
 const useStyles = makeStyles({
   card: {
@@ -22,18 +22,26 @@ const Dashboard = (props: any) => {
       console.log('metricTags2', data);
       const { getMetrics } = data;
       props.dispatch({ type: RECEIVED_METRICS_TAGS, payload: getMetrics });
+
+      Promise.all(getMetrics
+      .map((metric: any) => {
+        return getLastKnownMeasurement(metric);
+      })).then((data) => {
+        console.log('getLastKnownMeaturement:', data);
+        props.dispatch({ type: RECEIVED_METRICS_LAST_MEASUREMENTS, payload: data })
+      })
     });
   }, []);
 
   useEffect(() => {
     console.log('using it', props.metrics);
 
-    if (Object.keys(props.metrics).length > 0) {
       const after = new Date();
       after.setMinutes(after.getMinutes() - 30);
 
-      Promise.all(Object.keys(props.metrics).filter((metric: any) => props.metrics[metric].active).map((key: any) => {
-
+      Promise.all(Object.keys(props.metrics)
+      .filter((metric: any) => props.metrics[metric].active)
+      .map((key: any) => {
         return getMetricData(key, after.getTime());
       })).then((allData: any) => {
         console.log('AD', allData);
@@ -57,14 +65,13 @@ const Dashboard = (props: any) => {
 
         props.dispatch({ type: RECEIVED_CHART_METRICS, payload: formattedData });
       })
-    }
   }, [props.metrics]);
   console.log('rendering dashboard', props);
 
   return (
     <div className={classes.card}>
       <Sidebar colors={props.colors} metrics={props.metrics} dispatch={props.dispatch} />
-      <Chart colors={props.colors} activeTags={props.metrics} chartData={props.chartData} />
+      <Chart colors={props.colors} metrics={props.metrics} chartData={props.chartData} />
     </div>
   );
 };
