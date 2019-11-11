@@ -1,44 +1,24 @@
-import { RECEIVED_METRICS_TAGS, RECEIVED_CHART_METRICS } from '../actions';
+import { RECEIVED_METRICS_TAGS, TOGGLE_SELECTED_METRIC } from '../actions';
 
-const initialState = {
-  metrics: {},
-  colors: ['red', 'blue', 'pink', 'orange', 'yellow', 'green', 'purple'],
-};
-
-
-export const getSelectedMetrics = (state: any) => {
-  const metrics = state.metrics || {};
-  return Object.keys(metrics).filter((metric: any) => metrics[metric].selected);
-};
+const initialState = {};
 
 export const metricsReducer = (state: any = initialState, action: any) => {
 
   switch (action.type) {
-    case RECEIVED_CHART_METRICS:
-      return Object.assign({}, state, {
-        chartMetrics: action.payload,
-      });
-    case 'RECEIVED_METRICS_INITIAL_LOAD':
-      return Object.assign({}, state, {
-        allMetrics: action.payload,
-      });
-    case 'RECEIVED_CHART_METRICS':
-      return Object.assign({}, state, {
-        chartMetrics: action.payload,
-      });
     case RECEIVED_METRICS_TAGS:
-      const hasMetrics = Object.keys(state.metrics || {}).length;
-      const metrics = hasMetrics ? state.metrics : action.payload.reduce((o: any, k: any) => ({...o, [k]: {active: true}}), {});
-      console.log('MET', metrics);
+        const hasMetrics = Object.keys(state.metrics || {}).length;
+        const tags = hasMetrics ? state.metrics : action.payload.reduce((o: any, k: any) => ({...o, [k]: {active: true}}), {});
+        console.log('MET', tags);
 
-      const newstate =  Object.assign({}, state, {
-        chartTags: action.payload,
-        metrics,
-      });
-      console.log('NS,', newstate);
+        const newstate =  Object.assign({}, state, { ...tags });
 
-      return newstate;
-    default:
-      return state
+        return newstate;
+        case TOGGLE_SELECTED_METRIC:
+        const toggledTagState = Object.assign({}, state);
+        toggledTagState[action.payload].active = !toggledTagState[action.payload].active;
+
+      return toggledTagState;
+      default:
+        return state;
   }
 }

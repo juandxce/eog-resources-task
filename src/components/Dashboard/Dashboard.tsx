@@ -4,9 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Sidebar from '../Sidebar/Sidebar';
 import Chart from '../Chart/Chart';
 import { connect } from 'react-redux';
-import { getSelectedMetrics } from '../../store/reducers/MetricsReducer'
 import { getMetricTags, getMetricData } from '../../store/api/metrics';
-import { RECEIVED_METRICS_TAGS } from '../../store/actions';
+import { RECEIVED_METRICS_TAGS, RECEIVED_CHART_METRICS } from '../../store/actions';
 
 const useStyles = makeStyles({
   card: {
@@ -23,15 +22,21 @@ const Dashboard = (props: any) => {
       console.log('metricTags2', data);
       const { getMetrics } = data;
       props.dispatch({ type: RECEIVED_METRICS_TAGS, payload: getMetrics });
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log('using it', props.metrics);
+
+    if (Object.keys(props.metrics).length > 0) {
       const after = new Date();
       after.setMinutes(after.getMinutes() - 30);
 
-      Promise.all(getMetrics.map((key: any) => {
+      Promise.all(Object.keys(props.metrics).filter((metric: any) => props.metrics[metric].active).map((key: any) => {
 
         return getMetricData(key, after.getTime());
       })).then((allData: any) => {
         console.log('AD', allData);
-        props.dispatch({ type: 'RECEIVED_METRICS_INITIAL_LOAD', payload: allData });
 
         const formattedData: any = [];
 
@@ -48,33 +53,30 @@ const Dashboard = (props: any) => {
             }
           }
         }
-        console.log('FEFEEF', formattedData);
+        // console.log('FEFEEF', formattedData);
 
-        props.dispatch({ type: 'RECEIVED_CHART_METRICS', payload: formattedData });
+        props.dispatch({ type: RECEIVED_CHART_METRICS, payload: formattedData });
       })
-    });
-  }, []);
-  console.log('WAWW', props);
+    }
+  }, [props.metrics]);
+  console.log('rendering dashboard', props);
 
   return (
     <div className={classes.card}>
-      {props.chartTags && props.chartTags[0]}
-      <Sidebar />
-      <Chart colors={props.colors} activeTags={props.metrics} chartData={props.chartMetrics} />
+      <Sidebar colors={props.colors} metrics={props.metrics} dispatch={props.dispatch} />
+      <Chart colors={props.colors} activeTags={props.metrics} chartData={props.chartData} />
     </div>
   );
 };
 
 const mapStateToProps = (state: any) => {
   console.log('APP STATE,', state);
-  
+
   return ({
-    chartTags: state.metrics.chartTags,
-    chartMetrics: state.metrics.chartMetrics,
-    metrics: state.metrics.metrics,
-    chart: state.metrics.chart,
-    colors: state.metrics.colors,
-    // activeMetrics: getSelectedMetrics(state)
+    chartTags: Object.keys(state.metrics),
+    metrics: state.metrics,
+    chartData: state.chartData,
+    colors: state.colors,
   })
 };
 
