@@ -15,6 +15,11 @@ const useStyles = makeStyles({
     fontSize: '19px',
     textShadow: '3px 2px 2px #333',
     overflow: 'hidden',
+    transition: 'all .3s',
+    cursor: 'pointer',
+    '&:hover': {
+      'boxShadow': '3px 3px 5px #444',
+    }
   },
   cardMeasurement: {
     display: 'block',
