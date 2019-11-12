@@ -19,7 +19,7 @@ export default (props: any) => {
       <LineChart width={800} height={800} data={data}>
         <YAxis label={{ angle: -90, value: 'values' }} />
         <XAxis label={{ value: 'time' }} dataKey="at" interval="preserveStartEnd" minTickGap={20} />
-        <Tooltip content={<ChartTooltip />} />
+        <Tooltip content={<ChartTooltip metrics={props.metrics} />} />
         <Legend />
         {props.metrics && Object.keys(props.metrics).map((metric: any, index: number) => (
         <Line type="monotone" dot={false} key={metric} dataKey={metric} stroke={props.colors[index] || 'orange'} />
