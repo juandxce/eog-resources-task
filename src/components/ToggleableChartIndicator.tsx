@@ -12,7 +12,19 @@ const useStyles = makeStyles({
     width: '200px',
     height: '100px',
     borderRadius: '10px',
+    fontSize: '19px',
+    textShadow: '3px 2px 2px #333',
+    overflow: 'hidden',
   },
+  cardMeasurement: {
+    display: 'block',
+    textAlign: 'right',
+  },
+  cardTitle: {
+    display: 'block',
+    textAlign: 'center',
+    whiteSpace: 'nowrap',
+  }
 });
 
 export const ToggleableChartIndicator = (props: any) => {
@@ -21,9 +33,8 @@ export const ToggleableChartIndicator = (props: any) => {
     <div style={{background: props.background, opacity: props.active? '1': '.3'}} onClick={() => {
       props.dispatch({type: TOGGLE_SELECTED_METRIC, payload: props.label})
     }} className={classes.card}>
-      <span>{props.label}</span>
-      <span>{props.value}{props.unit}</span>
-      <span>{props.active}</span>
+      <span className={classes.cardTitle}>{props.label}</span>
+      <span className={classes.cardMeasurement}>{props.value} {props.unit}</span>
     </div>
   );
 };
