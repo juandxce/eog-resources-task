@@ -1,5 +1,5 @@
 import ApolloClient from 'apollo-boost';
-import { getPastMetricsQuery, getMetricsQuery, getLastKnownMeasurementQuery } from './queries';
+import { getMultipleMeasurementsQuery, getMetricsQuery, getLastKnownMeasurementQuery } from './queries';
 
 const Client = new ApolloClient({
   uri: 'https://react.eogresources.com/graphql'
@@ -19,15 +19,18 @@ export const getMetricTags = async () => {
 }
 
 
-export const getMetricData = async (metricName: any, after: any) => {
+export const getMetricData = async (metricKeys: any, after: any) => {
+  const metrics = metricKeys.map((key: any) => {
+    return { metricName: key, after };
+  });
   const params = {
-    query: getPastMetricsQuery,
-    variables: { metricName, after }
+    query: getMultipleMeasurementsQuery,
+    variables: { input: metrics }
   };
 
   const { data } = await Client.query(params);
 
-  return data.getMultipleMeasurements[0];
+  return data.getMultipleMeasurements;
 }
 
 export const getLastKnownMeasurement = async (metricName: any) => {

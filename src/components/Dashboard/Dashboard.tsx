@@ -39,11 +39,9 @@ const Dashboard = (props: any) => {
       const after = new Date();
       after.setMinutes(after.getMinutes() - 30);
 
-      Promise.all(Object.keys(props.metrics)
-      .filter((metric: any) => props.metrics[metric].active)
-      .map((key: any) => {
-        return getMetricData(key, after.getTime());
-      })).then((allData: any) => {
+      getMetricData(Object.keys(props.metrics)
+      .filter((metric: any) => props.metrics[metric].active), after.getTime())
+      .then((allData: any) => {
         console.log('AD', allData);
 
         const formattedData: any = [];

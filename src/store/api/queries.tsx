@@ -1,9 +1,9 @@
 import gql from 'graphql-tag';
 
-export const getPastMetricsQuery = gql`
-query($metricName: String! $after: Timestamp!) {
-  getMultipleMeasurements(input: {metricName: $metricName after: $after}) {
-    metric,
+export const getMultipleMeasurementsQuery = gql`
+query($input: [MeasurementQuery]) {
+  getMultipleMeasurements(input: $input) {
+      metric,
     measurements {
       at,
       value,
