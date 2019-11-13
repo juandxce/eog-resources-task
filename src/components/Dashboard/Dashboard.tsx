@@ -54,8 +54,8 @@ const Dashboard = (props: any) => {
               formattedData[i] = {};
             }
             formattedData[i][metric.metric] = measure.value;
-            if (!container.at) {
-              container['at'] = measure.at;
+            if (!formattedData[i].at) {
+              formattedData[i].at = measure.at;
             }
           }
         }
