@@ -1,19 +1,51 @@
-import ApolloClient from 'apollo-boost';
-import { getMultipleMeasurementsQuery, getMetricsQuery, getLastKnownMeasurementQuery } from './queries';
+import { ApolloClient } from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 
-const Client = new ApolloClient({
-  uri: 'https://react.eogresources.com/graphql'
+import { getMultipleMeasurementsQuery, getMetricsQuery, getLastKnownMeasurementQuery } from './queries';
+import { newMeasurementSubscription } from './subscriptions';
+import { split } from 'apollo-link';
+import { HttpLink } from 'apollo-link-http';
+import { WebSocketLink } from 'apollo-link-ws';
+import { Observable } from 'apollo-link';
+import { getMainDefinition } from 'apollo-utilities';
+
+
+
+
+const httpLink = new HttpLink({
+  uri: 'https://react.eogresources.com/graphql',
 });
 
+const wsLink = new WebSocketLink({
+  uri: 'wss://react.eogresources.com/graphql',
+  options: {
+    reconnect: true
+  }
+});
+
+const link = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    );
+  },
+  wsLink,
+  httpLink,
+);
+
+export const Client = new ApolloClient({
+  link,
+  cache: new InMemoryCache()
+});
 
 export const getMetricTags = async () => {
-
   const params = {
     query: getMetricsQuery
   };
 
   const metricTags = await Client.query(params);
-  console.log('metricTags', metricTags);
 
   return metricTags;
 }
@@ -40,7 +72,6 @@ export const getLastKnownMeasurement = async (metricName: any) => {
   };
 
   const { data } = await Client.query(params);
-  console.log('getLastKnownMeaturement', data.getLastKnownMeasurement);
 
   return data.getLastKnownMeasurement;
 }
