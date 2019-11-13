@@ -1,8 +1,6 @@
 import { RECEIVED_CHART_METRICS } from '../actions';
 
-const initialState = {
-  chartData: [],
-};
+const initialState: any = [];
 
 export const chartReducer = (state: any = initialState, action: any) => {
 
