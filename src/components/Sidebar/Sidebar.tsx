@@ -9,8 +9,7 @@ const useStyles = makeStyles({
 
 export default (props: any) => {
   const classes = useStyles();
-  console.log('props.metrics', props.metrics);
-  
+
   return (
     <div className={classes.card}>
       {Object.keys(props.metrics).map((metric: any, index: number) => (

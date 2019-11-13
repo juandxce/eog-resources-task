@@ -20,8 +20,8 @@ const ChartTooltip = ({ metrics }: any) => {
   <div className={classes.chartTooltip} >
     {Object.keys(metrics)
     .filter(metric => metrics[metric].active)
-    .map((metric: any) => (
-      <div>{`${metric}: ${metrics[metric].value}${metrics[metric].unit}`}</div>
+    .map((metric: any, index: number) => (
+      <div key={index}>{`${metric}: ${metrics[metric].value}${metrics[metric].unit}`}</div>
     ))}
   </div>);
 }

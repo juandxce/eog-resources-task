@@ -12,7 +12,6 @@ const useStyles = makeStyles({
 export default (props: any) => {
   const classes = useStyles();
   const data = props.chartData;
-  console.log('data???????', props);
 
   return (
     <div className={classes.card}>
