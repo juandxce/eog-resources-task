@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     height: '100px',
     borderRadius: '10px',
     fontSize: '19px',
-    textShadow: '3px 2px 2px #333',
+    textShadow: '2px 2px 3px #333',
     overflow: 'hidden',
     transition: 'all .3s',
     cursor: 'pointer',
