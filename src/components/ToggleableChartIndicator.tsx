@@ -40,7 +40,6 @@ export const ToggleableChartIndicator = (props: any) => {
 
   let latestValue;
   const { data: info } = useSubscription(newMeasurementSubscription);
-  // console.log('WORKS', info && info.newMeasurement);
   if(props.active && info && (info.newMeasurement.metric === props.label)) {
     latestValue = info && info.newMeasurement.value;
   }

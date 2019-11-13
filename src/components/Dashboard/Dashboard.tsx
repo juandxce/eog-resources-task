@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
 import Sidebar from '../Sidebar/Sidebar';
 import Chart from '../Chart/Chart';
@@ -17,9 +16,7 @@ const useStyles = makeStyles({
 const Dashboard = (props: any) => {
   const classes = useStyles();
   useEffect(() => {
-    console.log('mounted props', props);
     getMetricTags().then(({ data }) => {
-      console.log('metricTags2', data);
       const { getMetrics } = data;
       props.dispatch({ type: RECEIVED_METRICS_TAGS, payload: getMetrics });
 
@@ -27,14 +24,12 @@ const Dashboard = (props: any) => {
       .map((metric: any) => {
         return getLastKnownMeasurement(metric);
       })).then((data) => {
-        console.log('getLastKnownMeaturement:', data);
         props.dispatch({ type: RECEIVED_METRICS_LAST_MEASUREMENTS, payload: data })
       })
     });
   }, []);
 
   useEffect(() => {
-    console.log('using it', props.metrics);
 
       const after = new Date();
       after.setMinutes(after.getMinutes() - 30);
@@ -42,7 +37,6 @@ const Dashboard = (props: any) => {
       getMetricData(Object.keys(props.metrics)
       .filter((metric: any) => props.metrics[metric].active), after.getTime())
       .then((allData: any) => {
-        console.log('AD', allData);
 
         const formattedData: any = [];
 
@@ -59,23 +53,20 @@ const Dashboard = (props: any) => {
             }
           }
         }
-        // console.log('FEFEEF', formattedData);
 
         props.dispatch({ type: RECEIVED_CHART_METRICS, payload: formattedData });
       })
   }, [props.metrics]);
-  console.log('rendering dashboard', props);
 
   return (
     <div className={classes.card}>
       <Sidebar colors={props.colors} metrics={props.metrics} dispatch={props.dispatch} />
-      <Chart colors={props.colors} metrics={props.metrics} chartData={props.chartData} />
+      <Chart dispatch={props.dispatch} colors={props.colors} metrics={props.metrics} chartData={props.chartData} />
     </div>
   );
 };
 
 const mapStateToProps = (state: any) => {
-  console.log('APP STATE,', state);
 
   return ({
     chartTags: Object.keys(state.metrics),
