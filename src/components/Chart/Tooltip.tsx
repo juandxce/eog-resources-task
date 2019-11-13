@@ -14,14 +14,15 @@ const useStyles = makeStyles({
   }
 });
 
-const ChartTooltip = ({ metrics }: any) => {
+const ChartTooltip = ({ metrics, payload }: any) => {
   const classes = useStyles();
+  if(!payload || !payload.length) return null;
   return(
   <div className={classes.chartTooltip} >
-    {Object.keys(metrics)
-    .filter(metric => metrics[metric].active)
-    .map((metric: any, index: number) => (
-      <div key={index}>{`${metric}: ${metrics[metric].value}${metrics[metric].unit}`}</div>
+    {payload.map((metric: any, index: number) => (
+      <div key={index}>
+        {`${metric.dataKey}: ${metric.value}${metrics[metric.dataKey].unit}`}
+      </div>
     ))}
   </div>);
 }
