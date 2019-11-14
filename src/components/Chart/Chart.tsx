@@ -1,5 +1,5 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, Legend, Tooltip } from 'recharts';
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Legend, Tooltip } from 'recharts';
 import ChartTooltip from './Tooltip';
 import { NewMeasurementSubscription } from '../../store/api/subscriptions';
 import { UPDATED_METRIC_VALUE } from '../../store/actions';
@@ -21,9 +21,11 @@ formatDateToTime = (time: any) => {
 
 render() {
   const data = this.props.chartData;
+  const chartHeight = window && window.innerHeight || 600;
   return (
-    <div className={'classes.card'}>
-      <LineChart width={800} height={800} data={data}>
+    <div style={{width:'75vw', minWidth: '700px'}}>
+      <ResponsiveContainer width="100%" height={chartHeight} >
+      <LineChart data={data}>
         <YAxis label={{ angle: -90, value: 'values' }} />
         <XAxis tickFormatter={this.formatDateToTime} label={{ value: 'time' }} dataKey="at" interval="preserveStartEnd" minTickGap={20} />
         <Tooltip content={<ChartTooltip metrics={this.props.metrics} />} />
@@ -32,6 +34,7 @@ render() {
         <Line type="monotone" dot={false} key={metric} dataKey={metric} stroke={this.props.colors[index] || 'orange'} />
         ))}
       </LineChart>
+      </ResponsiveContainer>
 
       {/* Handle the subscriptions incoming data */}
       <Subscription subscription={NewMeasurementSubscription}>

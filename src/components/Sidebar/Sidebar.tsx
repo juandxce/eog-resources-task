@@ -4,6 +4,7 @@ import ToggleableChartIndicator from '../ToggleableChartIndicator';
 const useStyles = makeStyles({
   card: {
     width: '20vw',
+    minWidth: '190px'
   },
 });
 

@@ -4,15 +4,15 @@ import { TOGGLE_SELECTED_METRIC } from '../store/actions'
 
 const useStyles = makeStyles({
   card: {
-    margin: '5% 25%',
+    margin: '5% auto',
     color: '#eee',
     background: '#333',
     fontWeight: 'bold',
     padding: '15px',
-    width: '200px',
-    height: '100px',
+    width: '170px',
+    height: '80px',
     borderRadius: '10px',
-    fontSize: '19px',
+    fontSize: '17px',
     textShadow: '2px 2px 3px #333',
     overflow: 'hidden',
     transition: 'all .3s',
