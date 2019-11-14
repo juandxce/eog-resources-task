@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-export const newMeasurementSubscription =  gql`
+export const NewMeasurementSubscription =  gql`
 subscription measurement {
   newMeasurement {
     metric,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, Legend, Tooltip } from 'recharts';
 import ChartTooltip from './Tooltip';
-import { newMeasurementSubscription } from '../../store/api/subscriptions';
+import { NewMeasurementSubscription } from '../../store/api/subscriptions';
 import { UPDATED_METRIC_VALUE } from '../../store/actions';
 import { REPLACE_LAST_CHART_VALUE, SET_NEW_LATEST_VALUE } from '../../store/actions';
 import { Subscription } from 'react-apollo';
@@ -34,7 +34,7 @@ render() {
       </LineChart>
 
       {/* Handle the subscriptions incoming data */}
-      <Subscription subscription={newMeasurementSubscription}>
+      <Subscription subscription={NewMeasurementSubscription}>
       {({error, data: newInfo }: any) => {
         if(error || !newInfo) return null;
         if(newInfo.newMeasurement) {

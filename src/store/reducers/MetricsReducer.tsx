@@ -2,7 +2,7 @@ import { RECEIVED_METRICS_TAGS, TOGGLE_SELECTED_METRIC, RECEIVED_METRICS_LAST_ME
 
 const initialState = {};
 
-export const metricsReducer = (state: any = initialState, action: any) => {
+export const MetricsReducer = (state: any = initialState, action: any) => {
 
   switch (action.type) {
     case RECEIVED_METRICS_TAGS:

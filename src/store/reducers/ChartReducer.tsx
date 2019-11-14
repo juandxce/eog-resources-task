@@ -2,7 +2,7 @@ import { RECEIVED_CHART_METRICS, UPDATED_METRIC_VALUE, REPLACE_LAST_CHART_VALUE 
 
 const initialState: any = [];
 
-export const chartReducer = (state: any = initialState, action: any) => {
+export const ChartReducer = (state: any = initialState, action: any) => {
 
   switch (action.type) {
     case RECEIVED_CHART_METRICS:

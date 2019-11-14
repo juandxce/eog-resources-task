@@ -1,13 +1,13 @@
 import { reducer as weatherReducer } from '../../Features/Weather/reducer';
-import { metricsReducer } from './MetricsReducer';
-import { chartReducer } from './ChartReducer';
-import { colorsReducer } from './ColorsReducer';
-import { latestMetricsValuesReducer } from './LatestMetricValuesReducer';
+import { MetricsReducer } from './MetricsReducer';
+import { ChartReducer } from './ChartReducer';
+import { ColorsReducer } from './ColorsReducer';
+import { LatestMetricsValuesReducer } from './LatestMetricValuesReducer';
 
 export default {
   weather: weatherReducer,
-  metrics: metricsReducer,
-  chartData: chartReducer,
-  colors: colorsReducer,
-  latestMetricsValues: latestMetricsValuesReducer,
+  metrics: MetricsReducer,
+  chartData: ChartReducer,
+  colors: ColorsReducer,
+  latestMetricsValues: LatestMetricsValuesReducer,
 };
