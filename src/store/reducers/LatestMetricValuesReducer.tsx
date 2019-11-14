@@ -7,8 +7,8 @@ export const latestMetricsValuesReducer = (state: any = initialState, action: an
   switch (action.type) {
       case SET_NEW_LATEST_VALUE:
         const changedMetricUnitState = Object.assign({}, state, action.payload);
-        console.log('changedMetricUnitState',changedMetricUnitState);
-      return changedMetricUnitState;
+
+        return changedMetricUnitState;
 
       default:
       return state;

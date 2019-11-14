@@ -17,12 +17,12 @@ export const metricsReducer = (state: any = initialState, action: any) => {
 
       return toggledTagState;
 
+      // only updates the metric units
         case RECEIVED_METRICS_LAST_MEASUREMENTS:
         const changedMetricUnitState = Object.assign({}, state);
           action.payload.map((lastMeasurement: any) => {
             if(changedMetricUnitState[lastMeasurement.metric].unit !== lastMeasurement.unit) {
               changedMetricUnitState[lastMeasurement.metric].unit = lastMeasurement.unit;
-              changedMetricUnitState[lastMeasurement.metric].value = lastMeasurement.value;
             }
             return lastMeasurement;
           })

@@ -46,6 +46,7 @@ render() {
           const isActive = this.props.metrics[measurementUpdate.metric].active;
 
           if(!isActive || !hasData) return null;
+          // update the latest value for that metric (only in toggleableIndicators)
           this.props.dispatch({ type: SET_NEW_LATEST_VALUE, payload: { [measurementUpdate.metric]: measurementUpdate.value }});
           if(haveSameTime && haveDifferentValues ) {
             // update last chart points value
