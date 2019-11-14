@@ -19,6 +19,7 @@ const ChartTooltip = ({ metrics, payload }: any) => {
   if(!payload || !payload.length) return null;
   return(
   <div className={classes.chartTooltip} >
+    <div>{`Time: ${new Date(payload[0].payload.at).toLocaleTimeString()}`}</div>
     {payload.map((metric: any, index: number) => (
       <div key={index}>
         {`${metric.dataKey}: ${metric.value}${metrics[metric.dataKey].unit}`}
