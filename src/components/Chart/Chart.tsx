@@ -28,9 +28,11 @@ const Chart = (props: any) => {
     const lastDataItem = (!!hasData && data[data.length-1]) || {};
     const haveDifferentValues = measurementUpdate.value !== lastDataItem[measurementUpdate.metric];
     const haveSameTime = measurementUpdate.at === lastDataItem.at;
-    if(hasData && haveSameTime && haveDifferentValues ) {
+    const isActive = props.metrics[measurementUpdate.metric].active;
+
+    if(isActive && hasData && haveSameTime && haveDifferentValues ) {
       props.dispatch({ type: UPDATED_METRIC_VALUE, payload: measurementUpdate })
-    } else if(hasData && (measurementUpdate.at > lastDataItem.at)){
+    } else if(isActive && hasData && (measurementUpdate.at > lastDataItem.at)){
       props.dispatch({ type: REPLACE_LAST_CHART_VALUE, payload: measurementUpdate })
     }
   }
