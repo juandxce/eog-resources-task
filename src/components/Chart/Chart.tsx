@@ -1,54 +1,64 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { LineChart, Line, XAxis, YAxis, Legend, Tooltip } from 'recharts';
 import ChartTooltip from './Tooltip';
-import { useSubscription } from '@apollo/react-hooks';
 import { newMeasurementSubscription } from '../../store/api/subscriptions';
 import { UPDATED_METRIC_VALUE } from '../../store/actions';
 import { REPLACE_LAST_CHART_VALUE } from '../../store/actions';
+import { Subscription } from 'react-apollo';
 
-const useStyles = makeStyles({
-  card: {
-    width: '70vw',
-  },
-});
+class Chart extends React.Component <any, any> {
 
-const Chart = (props: any) => {
-  const classes = useStyles();
-  const data = props.chartData;
-  const formatDateToTime = (time: any) => {
-    return new Date(time).toLocaleTimeString();
-  }
+shouldComponentUpdate(nextprops: any, nextState: any) {
+  const hasChartData = !!this.props.chartData[this.props.chartData.length-1];
+  const receivedNewChartData = this.props.chartData.length != nextprops.chartData.length;
+  const shouldComponentUpdate = receivedNewChartData || hasChartData && (this.props.chartData[this.props.chartData.length-1].at !== nextprops.chartData[nextprops.chartData.length-1].at);
+  return shouldComponentUpdate;
+}
 
-  let measurementUpdate;
-  const { data: info } = useSubscription(newMeasurementSubscription);
-  if(info && (info.newMeasurement)) {
-    measurementUpdate = info.newMeasurement;
-    const hasData = data.length;
-    const lastDataItem = (!!hasData && data[data.length-1]) || {};
-    const haveDifferentValues = measurementUpdate.value !== lastDataItem[measurementUpdate.metric];
-    const haveSameTime = measurementUpdate.at === lastDataItem.at;
-    const isActive = props.metrics[measurementUpdate.metric].active;
+formatDateToTime = (time: any) => {
+  return new Date(time).toLocaleTimeString();
+}
 
-    if(isActive && hasData && haveSameTime && haveDifferentValues ) {
-      props.dispatch({ type: UPDATED_METRIC_VALUE, payload: measurementUpdate })
-    } else if(isActive && hasData && (measurementUpdate.at > lastDataItem.at)){
-      props.dispatch({ type: REPLACE_LAST_CHART_VALUE, payload: measurementUpdate })
-    }
-  }
-
+render() {
+  const data = this.props.chartData;
   return (
-    <div className={classes.card}>
+    <div className={'classes.card'}>
       <LineChart width={800} height={800} data={data}>
         <YAxis label={{ angle: -90, value: 'values' }} />
-        <XAxis tickFormatter={formatDateToTime} label={{ value: 'time' }} dataKey="at" interval="preserveStartEnd" minTickGap={20} />
-        <Tooltip content={<ChartTooltip metrics={props.metrics} />} />
+        <XAxis tickFormatter={this.formatDateToTime} label={{ value: 'time' }} dataKey="at" interval="preserveStartEnd" minTickGap={20} />
+        <Tooltip content={<ChartTooltip metrics={this.props.metrics} />} />
         <Legend />
-        {props.metrics && Object.keys(props.metrics).map((metric: any, index: number) => (
-        <Line type="monotone" dot={false} key={metric} dataKey={metric} stroke={props.colors[index] || 'orange'} />
+        {this.props.metrics && Object.keys(this.props.metrics).map((metric: any, index: number) => (
+        <Line type="monotone" dot={false} key={metric} dataKey={metric} stroke={this.props.colors[index] || 'orange'} />
         ))}
       </LineChart>
+
+      {/* Handle the subscriptions incoming data */}
+      <Subscription subscription={newMeasurementSubscription}>
+      {({error, data: newInfo }: any) => {
+        if(error || !newInfo) return null;
+        if(newInfo.newMeasurement) {
+          const measurementUpdate = newInfo.newMeasurement;
+          const hasData = data.length;
+          const lastDataItem = (!!hasData && data[data.length-1]) || {};
+          const haveDifferentValues = measurementUpdate.value !== lastDataItem[measurementUpdate.metric];
+          const haveSameTime = measurementUpdate.at === lastDataItem.at;
+          const isActive = this.props.metrics[measurementUpdate.metric].active;
+
+          if(!isActive || !hasData) return null;
+          if(haveSameTime && haveDifferentValues ) {
+            // update last chart points value
+            this.props.dispatch({ type: UPDATED_METRIC_VALUE, payload: measurementUpdate });
+          } else if(measurementUpdate.at > lastDataItem.at) {
+            // create a new chart points value obj at the end
+            this.props.dispatch({ type: REPLACE_LAST_CHART_VALUE, payload: measurementUpdate });
+          }
+        }
+        return(null);
+      }}
+      </Subscription>
     </div>
   );
+}
 };
 export default Chart;
