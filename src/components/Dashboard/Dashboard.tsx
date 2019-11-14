@@ -60,7 +60,7 @@ const Dashboard = (props: any) => {
 
   return (
     <div className={classes.card}>
-      <Sidebar colors={props.colors} metrics={props.metrics} dispatch={props.dispatch} />
+      <Sidebar colors={props.colors} metrics={props.metrics} latestMetricsValues={props.latestMetricsValues} dispatch={props.dispatch} />
       <Chart dispatch={props.dispatch} colors={props.colors} metrics={props.metrics} chartData={props.chartData} />
     </div>
   );
@@ -73,6 +73,7 @@ const mapStateToProps = (state: any) => {
     metrics: state.metrics,
     chartData: state.chartData,
     colors: state.colors,
+    latestMetricsValues: state.latestMetricsValues
   })
 };
 

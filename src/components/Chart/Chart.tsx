@@ -3,7 +3,7 @@ import { LineChart, Line, XAxis, YAxis, Legend, Tooltip } from 'recharts';
 import ChartTooltip from './Tooltip';
 import { newMeasurementSubscription } from '../../store/api/subscriptions';
 import { UPDATED_METRIC_VALUE } from '../../store/actions';
-import { REPLACE_LAST_CHART_VALUE } from '../../store/actions';
+import { REPLACE_LAST_CHART_VALUE, SET_NEW_LATEST_VALUE } from '../../store/actions';
 import { Subscription } from 'react-apollo';
 
 class Chart extends React.Component <any, any> {
@@ -46,6 +46,7 @@ render() {
           const isActive = this.props.metrics[measurementUpdate.metric].active;
 
           if(!isActive || !hasData) return null;
+          this.props.dispatch({ type: SET_NEW_LATEST_VALUE, payload: { [measurementUpdate.metric]: measurementUpdate.value }});
           if(haveSameTime && haveDifferentValues ) {
             // update last chart points value
             this.props.dispatch({ type: UPDATED_METRIC_VALUE, payload: measurementUpdate });
