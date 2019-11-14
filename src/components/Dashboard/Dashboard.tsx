@@ -13,7 +13,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Dashboard = (props: any) => {
+function Dashboard(props: any) {
   const classes = useStyles();
   useEffect(() => {
     getMetricTags().then(({ data }) => {

@@ -14,7 +14,7 @@ const useStyles = makeStyles({
   }
 });
 
-const ChartTooltip = ({ metrics, payload }: any) => {
+function ChartTooltip({ metrics, payload }: any) {
   const classes = useStyles();
   if(!payload || !payload.length) return null;
   return(

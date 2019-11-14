@@ -7,7 +7,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default (props: any) => {
+function Sidebar (props: any) {
   const classes = useStyles();
 
   return (
@@ -18,3 +18,4 @@ export default (props: any) => {
     </div>
   );
 };
+export default Sidebar;
