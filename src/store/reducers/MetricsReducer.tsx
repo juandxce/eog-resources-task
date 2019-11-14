@@ -24,6 +24,7 @@ export const metricsReducer = (state: any = initialState, action: any) => {
               changedMetricUnitState[lastMeasurement.metric].unit = lastMeasurement.unit;
               changedMetricUnitState[lastMeasurement.metric].value = lastMeasurement.value;
             }
+            return lastMeasurement;
           })
           return changedMetricUnitState;
 
