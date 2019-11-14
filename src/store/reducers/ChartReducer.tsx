@@ -1,5 +1,4 @@
 import { RECEIVED_CHART_METRICS, UPDATED_METRIC_VALUE, REPLACE_LAST_CHART_VALUE } from '../actions';
-import {statement} from '@babel/template';
 
 const initialState: any = [];
 
@@ -16,11 +15,11 @@ export const chartReducer = (state: any = initialState, action: any) => {
 
         return updatedValueState;
 
-      case UPDATED_METRIC_VALUE:
-        const valueStateToReplaceInto = [...state];
-        valueStateToReplaceInto[valueStateToReplaceInto.length-1][action.payload.metric] = action.payload.value;
+        case UPDATED_METRIC_VALUE:
+          const valueStateToReplaceInto = [...state];
+            valueStateToReplaceInto[valueStateToReplaceInto.length-1][action.payload.metric] = action.payload.value;
 
-        return valueStateToReplaceInto;
+            return valueStateToReplaceInto;
 
     default:
       return state
