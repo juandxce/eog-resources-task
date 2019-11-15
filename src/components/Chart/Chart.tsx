@@ -11,8 +11,8 @@ class Chart extends React.Component <any, any> {
 
 shouldComponentUpdate(nextprops: any, nextState: any) {
   const hasChartData = !!this.props.chartData[this.props.chartData.length-1];
-  const receivedNewChartData = this.props.chartData.length != nextprops.chartData.length;
-  const shouldComponentUpdate = receivedNewChartData || hasChartData && (this.props.chartData[this.props.chartData.length-1].at !== nextprops.chartData[nextprops.chartData.length-1].at);
+  const receivedNewChartData = this.props.chartData.length !== nextprops.chartData.length;
+  const shouldComponentUpdate = receivedNewChartData || (hasChartData && (this.props.chartData[this.props.chartData.length-1].at !== nextprops.chartData[nextprops.chartData.length-1].at));
   return shouldComponentUpdate;
 }
 
@@ -22,7 +22,7 @@ formatDateToTime = (time: any) => {
 
 render() {
   const data = this.props.chartData;
-  const chartHeight = window && window.innerHeight || 600;
+  const chartHeight = (window && window.innerHeight) || 600;
   return (
     <div style={{width:'75vw', minWidth: '700px'}}>
       <ResponsiveContainer width="100%" height={chartHeight} >

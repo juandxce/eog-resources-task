@@ -15,24 +15,23 @@ const useStyles = makeStyles({
   },
 });
 
-function Dashboard(props: any) {
+function Dashboard({dispatch, ...props}: any) {
   const classes = useStyles();
   useEffect(() => {
     getMetricTags().then(({ data }) => {
       const { getMetrics } = data;
-      props.dispatch({ type: RECEIVED_METRICS_TAGS, payload: getMetrics });
+      dispatch({ type: RECEIVED_METRICS_TAGS, payload: getMetrics });
 
       Promise.all(getMetrics
       .map((metric: any) => {
         return getLastKnownMeasurement(metric);
       })).then((data) => {
-        props.dispatch({ type: RECEIVED_METRICS_LAST_MEASUREMENTS, payload: data })
+        dispatch({ type: RECEIVED_METRICS_LAST_MEASUREMENTS, payload: data })
       })
     }).catch(addErrorMessage);
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-
       const after = new Date();
       after.setMinutes(after.getMinutes() - 30);
 
@@ -43,7 +42,6 @@ function Dashboard(props: any) {
         const formattedData: any = [];
 
         for (let metric of allData) {
-          let container: any = {};
           for (let i = 0; i < metric.measurements.length; i++) {
             const measure = metric.measurements[i];
             if(!formattedData[i]) {
@@ -56,15 +54,15 @@ function Dashboard(props: any) {
           }
         }
 
-        props.dispatch({ type: RECEIVED_CHART_METRICS, payload: formattedData });
+        dispatch({ type: RECEIVED_CHART_METRICS, payload: formattedData });
       })
       .catch(addErrorMessage);
-  }, [props.metrics]);
+  }, [props.metrics, dispatch]);
 
   return (
     <div className={classes.card}>
-      <Sidebar colors={props.colors} metrics={props.metrics} latestMetricsValues={props.latestMetricsValues} dispatch={props.dispatch} />
-      <Chart dispatch={props.dispatch} colors={props.colors} metrics={props.metrics} chartData={props.chartData} />
+      <Sidebar colors={props.colors} metrics={props.metrics} latestMetricsValues={props.latestMetricsValues} dispatch={dispatch} />
+      <Chart dispatch={dispatch} colors={props.colors} metrics={props.metrics} chartData={props.chartData} />
     </div>
   );
 };
