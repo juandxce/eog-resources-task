@@ -1,5 +1,5 @@
 import React from 'react';
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Legend, Tooltip } from 'recharts';
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Legend, Tooltip, CartesianGrid } from 'recharts';
 import ChartTooltip from './Tooltip';
 import { NewMeasurementSubscription } from '../../store/api/subscriptions';
 import { UPDATED_METRIC_VALUE } from '../../store/actions';
@@ -27,9 +27,10 @@ render() {
     <div style={{width:'75vw', minWidth: '700px'}}>
       <ResponsiveContainer width="100%" height={chartHeight} >
       <LineChart data={data}>
-        <YAxis label={{ angle: -90, value: 'values' }} />
+        <YAxis label={{ angle: -90, value: 'values', position: "insideLeft" }} />
         <XAxis tickFormatter={this.formatDateToTime} dataKey="at" interval="preserveStartEnd" minTickGap={20} />
         <Tooltip content={<ChartTooltip metrics={this.props.metrics} />} />
+        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
         <Legend />
         {this.props.metrics && Object.keys(this.props.metrics).map((metric: any, index: number) => (
         <Line type="monotone" dot={false} key={metric} dataKey={metric} stroke={this.props.colors[index] || 'orange'} />
