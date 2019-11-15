@@ -5,6 +5,7 @@ import { NewMeasurementSubscription } from '../../store/api/subscriptions';
 import { UPDATED_METRIC_VALUE } from '../../store/actions';
 import { REPLACE_LAST_CHART_VALUE, SET_NEW_LATEST_VALUE } from '../../store/actions';
 import { Subscription } from 'react-apollo';
+import {addErrorMessage} from '../../utils';
 
 class Chart extends React.Component <any, any> {
 
@@ -39,7 +40,11 @@ render() {
       {/* Handle the subscriptions incoming data */}
       <Subscription subscription={NewMeasurementSubscription}>
       {({error, data: newInfo }: any) => {
-        if(error || !newInfo) return null;
+        if(error) {
+          addErrorMessage(error);
+          return null;
+        }
+        if(!newInfo) return null;
         if(newInfo.newMeasurement) {
           const measurementUpdate = newInfo.newMeasurement;
           const hasData = data.length;

@@ -1,16 +1,34 @@
 import * as React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles({
-  wrapper: {
-    height: '100vh',
-    display: 'flex',
-  },
-});
+class Wrapper extends React.Component <any, any> {
+  constructor(props: any) {
+    super(props);
+    this.state = { error: null, errorInfo: null };
+  }
 
-const Wrapper: React.FC = ({ children }) => {
-  const classes = useStyles();
-  return <div className={classes.wrapper}>{children}</div>;
-};
+  componentDidCatch(error: any, errorInfo: any) {
+    this.setState({
+      error: error,
+      errorInfo: errorInfo
+    })
+  }
+
+  render() {
+    if (this.state.errorInfo) {
+      return (
+        <div style={{width: '100vw', textAlign: 'center'}}>
+          <h2>{`Sorry, it seems like my app broke`}</h2>
+          <strong style={{fontSize: '50px'}}>{`:'< `}</strong>
+          <details style={{ whiteSpace: 'pre-wrap' }}>
+            {this.state.error && this.state.error.toString()}
+            <br />
+            {this.state.errorInfo.componentStack}
+          </details>
+        </div>
+      );
+    }
+    return <div style={{ height: '100vh', display: 'flex' }}>{this.props.children}</div>
+  }
+}
 
 export default Wrapper;

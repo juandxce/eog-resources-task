@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { getMetricTags, getMetricData, getLastKnownMeasurement } from '../../store/api/metrics';
 import { RECEIVED_METRICS_TAGS, RECEIVED_CHART_METRICS, RECEIVED_METRICS_LAST_MEASUREMENTS } from '../../store/actions';
 
+import { addErrorMessage } from '../../utils';
+
 const useStyles = makeStyles({
   card: {
     width: '100vw',
@@ -26,7 +28,7 @@ function Dashboard(props: any) {
       })).then((data) => {
         props.dispatch({ type: RECEIVED_METRICS_LAST_MEASUREMENTS, payload: data })
       })
-    });
+    }).catch(addErrorMessage);
   }, []);
 
   useEffect(() => {
@@ -56,6 +58,7 @@ function Dashboard(props: any) {
 
         props.dispatch({ type: RECEIVED_CHART_METRICS, payload: formattedData });
       })
+      .catch(addErrorMessage);
   }, [props.metrics]);
 
   return (
@@ -69,7 +72,6 @@ function Dashboard(props: any) {
 const mapStateToProps = (state: any) => {
 
   return ({
-    chartTags: Object.keys(state.metrics),
     metrics: state.metrics,
     chartData: state.chartData,
     colors: state.colors,
