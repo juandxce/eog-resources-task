@@ -15,36 +15,40 @@ const useStyles = makeStyles({
   },
 });
 
-function Dashboard({dispatch, ...props}: any) {
+function Dashboard({ dispatch, ...props }: any) {
   const classes = useStyles();
   useEffect(() => {
-    getMetricTags().then(({ data }) => {
-      const { getMetrics } = data;
-      dispatch({ type: RECEIVED_METRICS_TAGS, payload: getMetrics });
+    getMetricTags()
+      .then(({ data }) => {
+        const { getMetrics } = data;
+        dispatch({ type: RECEIVED_METRICS_TAGS, payload: getMetrics });
 
-      Promise.all(getMetrics
-      .map((metric: any) => {
-        return getLastKnownMeasurement(metric);
-      })).then((data) => {
-        dispatch({ type: RECEIVED_METRICS_LAST_MEASUREMENTS, payload: data })
+        Promise.all(
+          getMetrics.map((metric: any) => {
+            return getLastKnownMeasurement(metric);
+          }),
+        ).then(data => {
+          dispatch({ type: RECEIVED_METRICS_LAST_MEASUREMENTS, payload: data });
+        });
       })
-    }).catch(addErrorMessage);
+      .catch(addErrorMessage);
   }, [dispatch]);
 
   useEffect(() => {
-      const after = new Date();
-      after.setMinutes(after.getMinutes() - 30);
+    const after = new Date();
+    after.setMinutes(after.getMinutes() - 30);
 
-      getMetricData(Object.keys(props.metrics)
-      .filter((metric: any) => props.metrics[metric].active), after.getTime())
+    getMetricData(
+      Object.keys(props.metrics).filter((metric: any) => props.metrics[metric].active),
+      after.getTime(),
+    )
       .then((allData: any) => {
-
         const formattedData: any = [];
 
         for (let metric of allData) {
           for (let i = 0; i < metric.measurements.length; i++) {
             const measure = metric.measurements[i];
-            if(!formattedData[i]) {
+            if (!formattedData[i]) {
               formattedData[i] = {};
             }
             formattedData[i][metric.metric] = measure.value;
@@ -61,25 +65,26 @@ function Dashboard({dispatch, ...props}: any) {
 
   return (
     <div className={classes.card}>
-      <Sidebar colors={props.colors} metrics={props.metrics} latestMetricsValues={props.latestMetricsValues} dispatch={dispatch} />
+      <Sidebar
+        colors={props.colors}
+        metrics={props.metrics}
+        latestMetricsValues={props.latestMetricsValues}
+        dispatch={dispatch}
+      />
       <Chart dispatch={dispatch} colors={props.colors} metrics={props.metrics} chartData={props.chartData} />
     </div>
   );
-};
+}
 
 const mapStateToProps = (state: any) => {
-
-  return ({
+  return {
     metrics: state.metrics,
     chartData: state.chartData,
     colors: state.colors,
-    latestMetricsValues: state.latestMetricsValues
-  })
+    latestMetricsValues: state.latestMetricsValues,
+  };
 };
 
-
-const ConnectedDashboard = connect(
-  mapStateToProps,
-)(Dashboard);
+const ConnectedDashboard = connect(mapStateToProps)(Dashboard);
 
 export default ConnectedDashboard;

@@ -7,9 +7,6 @@ import { HttpLink } from 'apollo-link-http';
 import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
 
-
-
-
 const httpLink = new HttpLink({
   uri: 'https://react.eogresources.com/graphql',
 });
@@ -17,17 +14,14 @@ const httpLink = new HttpLink({
 const wsLink = new WebSocketLink({
   uri: 'wss://react.eogresources.com/graphql',
   options: {
-    reconnect: true
-  }
+    reconnect: true,
+  },
 });
 
 const link = split(
   ({ query }) => {
     const definition = getMainDefinition(query);
-    return (
-      definition.kind === 'OperationDefinition' &&
-      definition.operation === 'subscription'
-    );
+    return definition.kind === 'OperationDefinition' && definition.operation === 'subscription';
   },
   wsLink,
   httpLink,
@@ -35,19 +29,18 @@ const link = split(
 
 export const Client = new ApolloClient({
   link,
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
 });
 
 export const getMetricTags = async () => {
   const params = {
-    query: getMetricsQuery
+    query: getMetricsQuery,
   };
 
   const metricTags = await Client.query(params);
 
   return metricTags;
-}
-
+};
 
 export const getMetricData = async (metricKeys: any, after: any) => {
   const metrics = metricKeys.map((key: any) => {
@@ -55,23 +48,23 @@ export const getMetricData = async (metricKeys: any, after: any) => {
   });
   const params = {
     query: getMultipleMeasurementsQuery,
-    variables: { input: metrics }
+    variables: { input: metrics },
   };
 
   const { data } = await Client.query(params);
 
   return data.getMultipleMeasurements;
-}
+};
 
 export const getLastKnownMeasurement = async (metricName: any) => {
   const params = {
     query: getLastKnownMeasurementQuery,
-    variables: { metricName }
+    variables: { metricName },
   };
 
   const { data } = await Client.query(params);
 
   return data.getLastKnownMeasurement;
-}
+};
 
 export default Client;

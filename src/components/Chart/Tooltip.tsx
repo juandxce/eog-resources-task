@@ -10,22 +10,21 @@ const useStyles = makeStyles({
     border: '1px solid #333',
     display: 'block',
     width: '250px',
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
 });
 
 function ChartTooltip({ metrics, payload }: any) {
   const classes = useStyles();
-  if(!payload || !payload.length) return null;
-  return(
-  <div className={classes.chartTooltip} >
-    <div>{`Time: ${new Date(payload[0].payload.at).toLocaleTimeString()}`}</div>
-    {payload.map((metric: any, index: number) => (
-      <div key={index}>
-        {`${metric.dataKey}: ${metric.value}${metrics[metric.dataKey].unit}`}
-      </div>
-    ))}
-  </div>);
+  if (!payload || !payload.length) return null;
+  return (
+    <div className={classes.chartTooltip}>
+      <div>{`Time: ${new Date(payload[0].payload.at).toLocaleTimeString()}`}</div>
+      {payload.map((metric: any, index: number) => (
+        <div key={index}>{`${metric.dataKey}: ${metric.value}${metrics[metric.dataKey].unit}`}</div>
+      ))}
+    </div>
+  );
 }
 
 export default ChartTooltip;
