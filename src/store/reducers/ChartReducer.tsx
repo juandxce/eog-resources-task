@@ -10,7 +10,8 @@ export const ChartReducer = (state: any = initialState, action: any) => {
 
     case REPLACE_LAST_CHART_VALUE:
       const updatedValueState = [...state];
-        updatedValueState.push({ at: action.payload.at, [action.payload.metric]: action.payload.value });
+      const newValue = Object.assign({}, state[state.length-1], { at: action.payload.at, [action.payload.metric]: action.payload.value })
+        updatedValueState.push(newValue);
         updatedValueState.shift();
 
         return updatedValueState;
