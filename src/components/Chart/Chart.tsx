@@ -27,7 +27,7 @@ render() {
       <ResponsiveContainer width="100%" height={chartHeight} >
       <LineChart data={data}>
         <YAxis label={{ angle: -90, value: 'values' }} />
-        <XAxis tickFormatter={this.formatDateToTime} label={{ value: 'time' }} dataKey="at" interval="preserveStartEnd" minTickGap={20} />
+        <XAxis tickFormatter={this.formatDateToTime} dataKey="at" interval="preserveStartEnd" minTickGap={20} />
         <Tooltip content={<ChartTooltip metrics={this.props.metrics} />} />
         <Legend />
         {this.props.metrics && Object.keys(this.props.metrics).map((metric: any, index: number) => (
