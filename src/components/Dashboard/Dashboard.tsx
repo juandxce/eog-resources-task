@@ -23,13 +23,14 @@ function Dashboard({ dispatch, ...props }: any) {
         const { getMetrics } = data;
         dispatch({ type: RECEIVED_METRICS_TAGS, payload: getMetrics });
 
-        Promise.all(
+        return Promise.all(
           getMetrics.map((metric: any) => {
             return getLastKnownMeasurement(metric);
           }),
-        ).then(data => {
-          dispatch({ type: RECEIVED_METRICS_LAST_MEASUREMENTS, payload: data });
-        });
+        )
+      })
+      .then(data => {
+        dispatch({ type: RECEIVED_METRICS_LAST_MEASUREMENTS, payload: data });
       })
       .catch(addErrorMessage);
   }, [dispatch]);
