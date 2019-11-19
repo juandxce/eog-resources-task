@@ -35,7 +35,7 @@ function Dashboard({ dispatch, ...props }: any) {
   }, [dispatch]);
 
   useEffect(() => {
-    const after = new Date();
+    const after = new Date(); // get the time from 30 minutes ago
     after.setMinutes(after.getMinutes() - 30);
 
     getMetricData(
