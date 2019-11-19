@@ -46,16 +46,15 @@ function Dashboard({ dispatch, ...props }: any) {
         const formattedData: any = [];
 
         for (let metric of allData) {
-          for (let i = 0; i < metric.measurements.length; i++) {
-            const measure = metric.measurements[i];
+          metric.measurements.map((measurement: any, i: number) => {
             if (!formattedData[i]) {
               formattedData[i] = {};
             }
-            formattedData[i][metric.metric] = measure.value;
+            formattedData[i][metric.metric] = measurement.value;
             if (!formattedData[i].at) {
-              formattedData[i].at = measure.at;
+              formattedData[i].at = measurement.at;
             }
-          }
+          });
         }
 
         dispatch({ type: RECEIVED_CHART_METRICS, payload: formattedData });
