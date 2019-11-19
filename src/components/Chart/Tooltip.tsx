@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { formatDateToTime } from '../../utils';
 
 const useStyles = makeStyles({
   chartTooltip: {
@@ -17,9 +18,10 @@ const useStyles = makeStyles({
 function ChartTooltip({ metrics, payload }: any) {
   const classes = useStyles();
   if (!payload || !payload.length) return null;
+  const time = formatDateToTime(payload[0].payload.at);
   return (
     <div className={classes.chartTooltip}>
-      <div>{`Time: ${new Date(payload[0].payload.at).toLocaleTimeString()}`}</div>
+      <div>{`Time: ${time}`}</div>
       {payload.map((metric: any, index: number) => (
         <div key={index}>{`${metric.dataKey}: ${metric.value}${metrics[metric.dataKey].unit}`}</div>
       ))}

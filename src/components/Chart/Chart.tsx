@@ -6,6 +6,7 @@ import { UPDATED_METRIC_VALUE } from '../../store/actions';
 import { REPLACE_LAST_CHART_VALUE, SET_NEW_LATEST_VALUE } from '../../store/actions';
 import { Subscription } from 'react-apollo';
 import { addErrorMessage } from '../../utils';
+import { formatDateToTime } from '../../utils';
 
 class Chart extends React.Component<any, any> {
   shouldComponentUpdate(nextprops: any, nextState: any) {
@@ -19,10 +20,6 @@ class Chart extends React.Component<any, any> {
     return shouldComponentUpdate;
   }
 
-  formatDateToTime = (time: any) => {
-    return new Date(time).toLocaleTimeString();
-  };
-
   render() {
     const data = this.props.chartData;
     const chartHeight = (window && window.innerHeight) || 600;
@@ -31,7 +28,7 @@ class Chart extends React.Component<any, any> {
         <ResponsiveContainer width="100%" height={chartHeight}>
           <LineChart data={data}>
             <YAxis label={{ angle: -90, value: 'values', position: 'insideLeft' }} />
-            <XAxis tickFormatter={this.formatDateToTime} dataKey="at" interval="preserveStartEnd" minTickGap={20} />
+            <XAxis tickFormatter={formatDateToTime} dataKey="at" interval="preserveStartEnd" minTickGap={20} />
             <Tooltip content={<ChartTooltip metrics={this.props.metrics} />} />
             <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
             <Legend />
