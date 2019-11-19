@@ -5,7 +5,7 @@ import Chart from '../Chart/Chart';
 import { connect } from 'react-redux';
 import { getMetricTags, getMetricData, getLastKnownMeasurement } from '../../store/api/metrics';
 import { RECEIVED_METRICS_TAGS, RECEIVED_CHART_METRICS, RECEIVED_METRICS_LAST_MEASUREMENTS } from '../../store/actions';
-
+import { getActiveMetrics } from '../../store/reducers/MetricsReducer';
 import { addErrorMessage } from '../../utils';
 
 const useStyles = makeStyles({
@@ -70,13 +70,14 @@ function Dashboard({ dispatch, ...props }: any) {
         latestMetricsValues={props.latestMetricsValues}
         dispatch={dispatch}
       />
-      <Chart dispatch={dispatch} colors={props.colors} metrics={props.metrics} chartData={props.chartData} />
+      <Chart activeMetrics={props.activeMetrics} dispatch={dispatch} colors={props.colors} metrics={props.metrics} chartData={props.chartData} />
     </div>
   );
 }
 
 const mapStateToProps = (state: any) => {
   return {
+    activeMetrics: getActiveMetrics(state),
     metrics: state.metrics,
     chartData: state.chartData,
     colors: state.colors,

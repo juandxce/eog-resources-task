@@ -33,3 +33,8 @@ export const MetricsReducer = (state: any = initialState, action: any) => {
       return state;
   }
 };
+
+export const getActiveMetrics = (state: any) => {
+  const metrics = state.metrics;
+  return Object.keys(metrics).filter(metric => metrics[metric].active);
+};
