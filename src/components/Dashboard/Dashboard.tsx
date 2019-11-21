@@ -4,7 +4,7 @@ import Sidebar from '../Sidebar/Sidebar';
 import Chart from '../Chart/Chart';
 import { connect, useDispatch } from 'react-redux';
 import { getMetricTags, getMetricData, getLastKnownMeasurement } from '../../store/api/metrics';
-import { RECEIVED_METRICS_TAGS, RECEIVED_CHART_METRICS, RECEIVED_METRICS_LAST_MEASUREMENTS } from '../../store/actions';
+import { RECEIVED_METRICS_TAGS, RECEIVED_METRICS_LAST_MEASUREMENTS } from '../../store/actions';
 import { getActiveMetrics } from '../../store/reducers/MetricsReducer';
 import { addErrorMessage } from '../../utils';
 import { actions } from '../../store/reducers/ChartReducer';
@@ -65,24 +65,15 @@ function Dashboard({ dispatch, ...props }: any) {
 
   return (
     <div className={classes.card}>
-      <Sidebar
-        colors={props.colors}
-        metrics={props.metrics}
-        latestMetricsValues={props.latestMetricsValues}
-        dispatch={dispatch}
-      />
-      <Chart activeMetrics={props.activeMetrics} dispatch={dispatch} colors={props.colors} metrics={props.metrics} chartData={props.chartData.data} />
+      <Sidebar />
+      <Chart />
     </div>
   );
 }
 
 const mapStateToProps = (state: any) => {
   return {
-    activeMetrics: getActiveMetrics(state),
     metrics: state.metrics,
-    chartData: state.chartData,
-    colors: state.colors,
-    latestMetricsValues: state.latestMetricsValues,
   };
 };
 

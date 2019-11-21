@@ -2,7 +2,8 @@ import React from 'react';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Legend, Tooltip, CartesianGrid } from 'recharts';
 import ChartTooltip from './Tooltip';
 import { NewMeasurementSubscription } from '../../store/api/subscriptions';
-import { actions } from '../../store/reducers/ChartReducer';
+import { connect } from 'react-redux';
+import { getActiveMetrics } from '../../store/reducers/MetricsReducer';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { SET_NEW_LATEST_VALUE } from '../../store/actions';
@@ -24,7 +25,7 @@ function Chart (props: any) {
   const dispatch = useDispatch();
   const data = props.chartData;
   const chartHeight = (window && window.innerHeight) || 600;
-  
+
   return (
     <div style={{ width: '75vw', minWidth: '700px' }}>
       <ResponsiveContainer width="100%" height={chartHeight}>
@@ -83,4 +84,16 @@ function Chart (props: any) {
     </div>
   );
 }
-export default Chart;
+
+const mapStateToProps = (state: any) => {
+  return {
+    metrics: state.metrics,
+    activeMetrics: getActiveMetrics(state),
+    colors: state.colors,
+    chartData: state.chartData.data,
+  };
+};
+
+const ConnectedChart = connect(mapStateToProps)(Chart);
+
+export default ConnectedChart;
