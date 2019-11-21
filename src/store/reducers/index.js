@@ -1,5 +1,5 @@
 import { MetricsReducer } from './MetricsReducer';
-import { ChartReducer } from './ChartReducer';
+import { reducer as ChartReducer } from './ChartReducer';
 import { ColorsReducer } from './ColorsReducer';
 import { LatestMetricsValuesReducer } from './LatestMetricValuesReducer';
 

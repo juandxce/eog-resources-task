@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Sidebar from '../Sidebar/Sidebar';
 import Chart from '../Chart/Chart';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { getMetricTags, getMetricData, getLastKnownMeasurement } from '../../store/api/metrics';
 import { RECEIVED_METRICS_TAGS, RECEIVED_CHART_METRICS, RECEIVED_METRICS_LAST_MEASUREMENTS } from '../../store/actions';
 import { getActiveMetrics } from '../../store/reducers/MetricsReducer';
 import { addErrorMessage } from '../../utils';
-
+import { actions } from '../../store/reducers/ChartReducer';
 const useStyles = makeStyles({
   card: {
     width: '100vw',
@@ -58,7 +58,7 @@ function Dashboard({ dispatch, ...props }: any) {
           });
         }
 
-        dispatch({ type: RECEIVED_CHART_METRICS, payload: formattedData });
+        dispatch(actions.RECEIVED_CHART_METRICS(formattedData));
       })
       .catch(addErrorMessage);
   }, [props.metrics, dispatch]);
@@ -71,7 +71,7 @@ function Dashboard({ dispatch, ...props }: any) {
         latestMetricsValues={props.latestMetricsValues}
         dispatch={dispatch}
       />
-      <Chart activeMetrics={props.activeMetrics} dispatch={dispatch} colors={props.colors} metrics={props.metrics} chartData={props.chartData} />
+      <Chart activeMetrics={props.activeMetrics} dispatch={dispatch} colors={props.colors} metrics={props.metrics} chartData={props.chartData.data} />
     </div>
   );
 }

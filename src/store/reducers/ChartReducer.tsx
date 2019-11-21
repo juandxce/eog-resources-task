@@ -1,30 +1,30 @@
-import { RECEIVED_CHART_METRICS, UPDATED_METRIC_VALUE, REPLACE_LAST_CHART_VALUE } from '../actions';
+import { createSlice, PayloadAction } from 'redux-starter-kit';
 
-const initialState: any = [];
+const initialState: any = {data: []};
 
-export const ChartReducer = (state: any = initialState, action: any) => {
-  switch (action.type) {
-    case RECEIVED_CHART_METRICS:
-      return action.payload;
-
-    case REPLACE_LAST_CHART_VALUE:
-      const updatedValueState = [...state];
-      const newValue = Object.assign({}, state[state.length - 1], {
-        at: action.payload.at,
-        [action.payload.metric]: action.payload.value,
+const slice = createSlice({
+  name: 'chartData',
+  initialState,
+  reducers: {
+    RECEIVED_CHART_METRICS: (state, action: PayloadAction<any>) => {
+      state.data = action.payload;
+    },
+    REPLACE_LAST_CHART_VALUE: (state, action: PayloadAction<any>) => {
+      const { at, metric, value } = action.payload;
+      const measurementsArr = state.data;
+      const newValue = Object.assign({}, measurementsArr[measurementsArr.length - 1], {
+        at,
+        [metric]: value,
       });
-      updatedValueState.push(newValue);
-      updatedValueState.shift();
+      measurementsArr.push(newValue);
+      measurementsArr.shift();
+    },
+    UPDATED_METRIC_VALUE: (state, action: PayloadAction<any>) => {
+      const { metric, value } = action.payload;
+      state.data[state.data.length - 1][metric] = value;
+    }
+  },
+});
 
-      return updatedValueState;
-
-    case UPDATED_METRIC_VALUE:
-      const valueStateToReplaceInto = [...state];
-      valueStateToReplaceInto[valueStateToReplaceInto.length - 1][action.payload.metric] = action.payload.value;
-
-      return valueStateToReplaceInto;
-
-    default:
-      return state;
-  }
-};
+export const reducer = slice.reducer;
+export const actions = slice.actions;
