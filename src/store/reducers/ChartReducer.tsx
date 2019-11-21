@@ -7,6 +7,8 @@ const slice = createSlice({
   initialState,
   reducers: {
     RECEIVED_CHART_METRICS: (state, action: PayloadAction<any>) => {
+      console.log('RECEIVED_CHART_METRICS');
+
       state.data = action.payload;
     },
     REPLACE_LAST_CHART_VALUE: (state, action: PayloadAction<any>) => {
