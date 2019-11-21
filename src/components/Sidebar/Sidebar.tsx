@@ -31,8 +31,6 @@ function Sidebar(props: any) {
 }
 
 const mapStateToProps = (state: any) => {
-  console.log('SIDESTATE', state);
-
   return {
     metrics: state.metrics,
     colors: state.colors,

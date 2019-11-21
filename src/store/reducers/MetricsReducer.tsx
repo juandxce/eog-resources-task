@@ -17,7 +17,6 @@ const slice = createSlice({
   reducers: {
     // only updates the metric units
     RECEIVED_METRICS_LAST_MEASUREMENTS: (state, action: PayloadAction<any>) => {
-      console.log('RECEIVED_METRICS_LAST_MEASUREMENTS', action);
       action.payload.forEach((lastMeasurement: any) => {
         if (state[lastMeasurement.metric].unit !== lastMeasurement.unit) {
           state[lastMeasurement.metric].unit = lastMeasurement.unit;
@@ -29,9 +28,6 @@ const slice = createSlice({
     },
     RECEIVED_METRICS_TAGS: (state, action: PayloadAction<any>) => {
       const hasMetrics = Object.keys(state.metrics || {}).length;
-      console.log('hasMetrics', state.metrics);
-      console.log('hasMetrics2', hasMetrics);
-      console.log('action.payload', action.payload);
       if (!hasMetrics) {
         action.payload.forEach((metric: any, index: any) => {
           state[metric] = { active: true };
