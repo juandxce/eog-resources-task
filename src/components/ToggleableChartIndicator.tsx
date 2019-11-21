@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { TOGGLE_SELECTED_METRIC } from '../store/actions';
+import { useDispatch } from 'react-redux';
+import { actions } from '../store/reducers/MetricsReducer';
 
 const useStyles = makeStyles({
   card: {
@@ -34,12 +35,12 @@ const useStyles = makeStyles({
 
 export function ToggleableChartIndicator(props: any) {
   const classes = useStyles();
-
+  const dispatch = useDispatch();
   return (
     <div
       style={{ background: props.background, opacity: props.active ? '1' : '.3' }}
       onClick={() => {
-        props.dispatch({ type: TOGGLE_SELECTED_METRIC, payload: props.label });
+        dispatch(actions.TOGGLE_SELECTED_METRIC(props.label));
       }}
       className={classes.card}
     >

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from 'redux-starter-kit';
 
-const initialState: any = {data: []};
+const initialState: any = { data: [] };
 
 const slice = createSlice({
   name: 'chartData',
@@ -24,7 +24,7 @@ const slice = createSlice({
     UPDATED_METRIC_VALUE: (state, action: PayloadAction<any>) => {
       const { metric, value } = action.payload;
       state.data[state.data.length - 1][metric] = value;
-    }
+    },
   },
 });
 

@@ -1,15 +1,17 @@
-import { SET_NEW_LATEST_VALUE } from '../actions';
+import { createSlice, PayloadAction } from 'redux-starter-kit';
 
 const initialState = {};
 
-export const LatestMetricsValuesReducer = (state: any = initialState, action: any) => {
-  switch (action.type) {
-    case SET_NEW_LATEST_VALUE:
-      const changedMetricUnitState = Object.assign({}, state, action.payload);
+const slice = createSlice({
+  name: 'chartData',
+  initialState,
+  reducers: {
+    SET_NEW_LATEST_VALUE: (state, action: PayloadAction<any>) => {
+      console.log('SETNEWLATESTVALUE', action.payload);
+      // state = action.payload;
+    },
+  },
+});
 
-      return changedMetricUnitState;
-
-    default:
-      return state;
-  }
-};
+export const reducer = slice.reducer;
+export const actions = slice.actions;

@@ -1,7 +1,7 @@
 import { reducer as MetricsReducer } from './MetricsReducer';
 import { reducer as ChartReducer } from './ChartReducer';
+import { reducer as LatestMetricsValuesReducer } from './LatestMetricValuesReducer';
 import { ColorsReducer } from './ColorsReducer';
-import { LatestMetricsValuesReducer } from './LatestMetricValuesReducer';
 
 export default {
   metrics: MetricsReducer,

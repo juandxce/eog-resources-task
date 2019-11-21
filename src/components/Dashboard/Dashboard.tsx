@@ -3,9 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Sidebar from '../Sidebar/Sidebar';
 import Chart from '../Chart/Chart';
 import { connect, useDispatch } from 'react-redux';
-import { getMetricTags, getMetricData, getLastKnownMeasurement } from '../../store/api/metrics';
-import { RECEIVED_METRICS_LAST_MEASUREMENTS } from '../../store/actions';
-import { getActiveMetrics } from '../../store/reducers/MetricsReducer';
+import { getMetricData, getLastKnownMeasurement } from '../../store/api/metrics';
 import { addErrorMessage } from '../../utils';
 import { actions as chartActions } from '../../store/reducers/ChartReducer';
 import { actions as metricsActions } from '../../store/reducers/MetricsReducer';
@@ -22,32 +20,32 @@ const useStyles = makeStyles({
 function Dashboard({ dispatch, metrics, ...props }: any) {
   const classes = useStyles();
 
-  const result = useQuery( getMetricsQuery, { })
+  const result = useQuery(getMetricsQuery, {});
   console.log('result', result);
   const { data, error } = result;
 
   useEffect(() => {
     console.log('USING IT', result);
 
-  if (error) {
-    dispatch(metricsActions.weatherApiErrorReceived({ error: error.message }));
-    return;
-  }
-  if (!data) return;
+    if (error) {
+      dispatch(metricsActions.weatherApiErrorReceived({ error: error.message }));
+      return;
+    }
+    if (!data) return;
 
-  const { getMetrics } = data;
-  console.log('DATA', data);
+    const { getMetrics } = data;
+    console.log('DATA', data);
 
-  console.log('DISPA', getMetrics);
-  dispatch(metricsActions.RECEIVED_METRICS_TAGS(getMetrics));
+    console.log('DISPA', getMetrics);
+    dispatch(metricsActions.RECEIVED_METRICS_TAGS(getMetrics));
 
-      Promise.all(
-        getMetrics.map((metric: any) => {
-          return getLastKnownMeasurement(metric);
-        }),
-      )
+    Promise.all(
+      getMetrics.map((metric: any) => {
+        return getLastKnownMeasurement(metric);
+      }),
+    )
       .then((data: any) => {
-        console.log("LAST MEASUREMENTS:", data);
+        console.log('LAST MEASUREMENTS:', data);
         dispatch(metricsActions.RECEIVED_METRICS_LAST_MEASUREMENTS(data));
       })
       .catch(addErrorMessage);

@@ -6,12 +6,12 @@ import { connect } from 'react-redux';
 import { getActiveMetrics } from '../../store/reducers/MetricsReducer';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { SET_NEW_LATEST_VALUE } from '../../store/actions';
+// import { SET_NEW_LATEST_VALUE } from '../../store/actions';
 import { Subscription } from 'react-apollo';
 import { addErrorMessage } from '../../utils';
 import { formatDateToTime } from '../../utils';
 
-function Chart (props: any) {
+function Chart(props: any) {
   // shouldComponentUpdate(nextprops: any, nextState: any) {
   //   const hasChartData = !!props.chartData[props.chartData.length - 1];
   //   const receivedNewChartData = props.chartData.length !== nextprops.chartData.length;
