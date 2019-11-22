@@ -3,14 +3,12 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Legend, Tooltip, Ca
 import ChartTooltip from './Tooltip';
 import { NewMeasurementSubscription } from '../../store/api/subscriptions';
 import { connect, useDispatch } from 'react-redux';
-import { getActiveMetrics } from '../../store/reducers/MetricsReducer';
-import { actions as metricsActions } from '../../store/reducers/MetricsReducer';
+import { actions as metricsActions, getActiveMetrics } from '../../store/reducers/MetricsReducer';
 import { actions as chartActions } from '../../store/reducers/ChartReducer';
 import { actions as latestValuesActions } from '../../store/reducers/LatestMetricValuesReducer';
 import { getMultipleMeasurementsQuery } from '../../store/api/queries';
 import { useQuery } from 'urql';
 import { Subscription } from 'react-apollo';
-import { addErrorMessage } from '../../utils';
 import { formatDateToTime } from '../../utils';
 
 // render only if the 'at' properties are different
@@ -108,7 +106,7 @@ const Chart = React.memo(function Chart({ metrics, ...props }: any) {
       <Subscription subscription={NewMeasurementSubscription}>
         {({ error, data: newInfo }: any) => {
           if (error) {
-            addErrorMessage(error);
+            dispatch(metricsActions.apiErrorReceived({ error: error.message }));
             return null;
           }
           if (!newInfo) return null;

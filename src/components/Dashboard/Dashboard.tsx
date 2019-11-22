@@ -4,7 +4,6 @@ import Sidebar from '../Sidebar/Sidebar';
 import Chart from '../Chart/Chart';
 import { connect, useDispatch } from 'react-redux';
 import { getLastKnownMeasurement } from '../../store/api/metrics';
-import { addErrorMessage } from '../../utils';
 import { actions as metricsActions } from '../../store/reducers/MetricsReducer';
 // stopped using it because of https://github.com/apollographql/react-apollo/issues/3270
 // import { useQuery } from 'react-apollo';
@@ -39,7 +38,9 @@ function Dashboard() {
       .then((data: any) => {
         dispatch(metricsActions.RECEIVED_METRICS_LAST_MEASUREMENTS(data));
       })
-      .catch(addErrorMessage);
+      .catch((error) => {
+        dispatch(metricsActions.apiErrorReceived({ error: error.message }));
+      });
   }, [dispatch, data, error]);
 
   return (
