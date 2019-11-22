@@ -8,7 +8,7 @@ import { addErrorMessage } from '../../utils';
 import { actions as metricsActions } from '../../store/reducers/MetricsReducer';
 // stopped using it because of https://github.com/apollographql/react-apollo/issues/3270
 // import { useQuery } from 'react-apollo';
-import { getMultipleMeasurementsQuery, getMetricsQuery, getLastKnownMeasurementQuery } from '../../store/api/queries';
+import { getMetricsQuery } from '../../store/api/queries';
 import { useQuery } from 'urql';
 
 const useStyles = makeStyles({
