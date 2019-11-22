@@ -32,19 +32,6 @@ export const Client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-export const getMetricData = async (metricKeys: any, after: any) => {
-  const metrics = metricKeys.map((key: any) => {
-    return { metricName: key, after };
-  });
-  const params = {
-    query: getMultipleMeasurementsQuery,
-    variables: { input: metrics },
-  };
-
-  const { data } = await Client.query(params);
-
-  return data.getMultipleMeasurements;
-};
 
 export const getLastKnownMeasurement = async (metricName: any) => {
   const params = {

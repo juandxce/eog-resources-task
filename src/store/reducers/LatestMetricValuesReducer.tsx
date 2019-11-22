@@ -7,7 +7,6 @@ const slice = createSlice({
   initialState,
   reducers: {
     SET_NEW_LATEST_VALUE: (state, action: PayloadAction<any>) => {
-      console.log('SETNEWLATESTVALUE', action.payload);
       const metric: string = Object.keys(action.payload)[0]
       state[metric] = action.payload[metric];
     },
