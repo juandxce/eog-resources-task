@@ -3,12 +3,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import Sidebar from '../Sidebar/Sidebar';
 import Chart from '../Chart/Chart';
 import { connect, useDispatch } from 'react-redux';
-import { getMetricData, getLastKnownMeasurement } from '../../store/api/metrics';
+import { getLastKnownMeasurement } from '../../store/api/metrics';
 import { addErrorMessage } from '../../utils';
 import { actions as chartActions } from '../../store/reducers/ChartReducer';
 import { actions as metricsActions } from '../../store/reducers/MetricsReducer';
-import { useQuery } from 'react-apollo';
+// stopped using it because of https://github.com/apollographql/react-apollo/issues/3270
+// import { useQuery } from 'react-apollo';
 import { getMultipleMeasurementsQuery, getMetricsQuery, getLastKnownMeasurementQuery } from '../../store/api/queries';
+import { useQuery } from 'urql';
 
 const useStyles = makeStyles({
   card: {
@@ -17,16 +19,15 @@ const useStyles = makeStyles({
   },
 });
 
-function Dashboard({ dispatch, metrics, ...props }: any) {
+function Dashboard({ dispatch }: any) {
   const classes = useStyles();
 
-  const result = useQuery(getMetricsQuery, {});
-  console.log('result', result);
+  const [result] = useQuery({ query: getMetricsQuery });
   const { data, error } = result;
 
   useEffect(() => {
     if (error) {
-      dispatch(metricsActions.weatherApiErrorReceived({ error: error.message }));
+      dispatch(metricsActions.apiErrorReceived({ error: error.message }));
       return;
     }
     if (!data) return;
@@ -40,33 +41,54 @@ function Dashboard({ dispatch, metrics, ...props }: any) {
       })
       .catch(addErrorMessage);
   }, [dispatch, data, error]);
+  // move it to another component
+  // const now = new Date(); // get the time from 30 minutes ago
+  // now.setMinutes(now.getMinutes() - 30);
+  // const after = now.getTime();
 
-  useEffect(() => {
-    const after = new Date(); // get the time from 30 minutes ago
-    after.setMinutes(after.getMinutes() - 30);
-    getMetricData(
-      Object.keys(metrics).filter((metric: any) => metrics[metric].active),
-      after.getTime(),
-    )
-      .then((allData: any) => {
-        const formattedData: any = [];
+  // const metricsToQuery = Object.keys(metrics)
+  //   .filter((metric: any) => metrics[metric].active)
+  //   .map((key: any) => ({
+  //     metricName: key,
+  //     after,
+  //   }));
 
-        for (let metric of allData) {
-          metric.measurements.map((measurement: any, i: number) => {
-            if (!formattedData[i]) {
-              formattedData[i] = {};
-            }
-            formattedData[i][metric.metric] = measurement.value;
-            if (!formattedData[i].at) {
-              formattedData[i].at = measurement.at;
-            }
-          });
-        }
+  // const [SR] = useQuery({
+  //   query: getMultipleMeasurementsQuery,
+  //   variables: {
+  //     input: metricsToQuery,
+  //   },
+  // });
+  // // console.log('SR', SR);
+  // const { data: dataMM, error: errorMM } = SR;
+  // // console.log('dataMM', { dataMM, errorMM, loadingMM });
 
-        dispatch(chartActions.RECEIVED_CHART_METRICS(formattedData));
-      })
-      .catch(addErrorMessage);
-  }, [metrics, dispatch]);
+  // useEffect(() => {
+  //   console.log('entering the second effect');
+  //   if (errorMM) {
+  //     dispatch(metricsActions.apiErrorReceived({ error: errorMM.message }));
+  //     return;
+  //   }
+  //   if (!dataMM) return;
+  //   const { getMultipleMeasurements } = dataMM;
+  //   console.log('MMD', dataMM);
+
+  //   // const formattedData: any = [];
+
+  //   // for (let metric of getMultipleMeasurements) {
+  //   //   metric.measurements.map((measurement: any, i: number) => {
+  //   //     if (!formattedData[i]) {
+  //   //       formattedData[i] = {};
+  //   //     }
+  //   //     formattedData[i][metric.metric] = measurement.value;
+  //   //     if (!formattedData[i].at) {
+  //   //       formattedData[i].at = measurement.at;
+  //   //     }
+  //   //   });
+  //   // }
+
+  //   // dispatch(chartActions.RECEIVED_CHART_METRICS(formattedData));
+  // }, [dispatch]);
 
   return (
     <div className={classes.card}>
@@ -79,7 +101,7 @@ function Dashboard({ dispatch, metrics, ...props }: any) {
 const mapStateToProps = (state: any) => {
   console.log('state', state);
   return {
-    metrics: state.metrics,
+    // metrics: state.metrics,
   };
 };
 

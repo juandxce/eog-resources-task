@@ -32,16 +32,6 @@ export const Client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-export const getMetricTags = async () => {
-  const params = {
-    query: getMetricsQuery,
-  };
-
-  const metricTags = await Client.query(params);
-
-  return metricTags;
-};
-
 export const getMetricData = async (metricKeys: any, after: any) => {
   const metrics = metricKeys.map((key: any) => {
     return { metricName: key, after };

@@ -34,7 +34,7 @@ const slice = createSlice({
         });
       }
     },
-    weatherApiErrorReceived: (state, action: PayloadAction<ApiErrorAction>) => state,
+    apiErrorReceived: (state, action: PayloadAction<ApiErrorAction>) => state,
   },
 });
 

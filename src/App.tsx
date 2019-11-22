@@ -1,6 +1,8 @@
 import React from 'react';
 import createStore from './store';
 import { Provider } from 'react-redux';
+import { Provider as URQLProvider, createClient } from 'urql';
+
 import { ToastContainer } from 'react-toastify';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,6 +11,10 @@ import Wrapper from './components/Wrapper';
 import Dashboard from './components/Dashboard/Dashboard';
 import { Client } from '../src/store/api/metrics';
 import { ApolloProvider } from '@apollo/react-hooks';
+
+const URQLclient = createClient({
+  url: 'https://react.eogresources.com/graphql',
+});
 
 const store = createStore();
 const theme = createMuiTheme({
@@ -30,10 +36,12 @@ const App = () => (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
       <Provider store={store}>
+      <URQLProvider value={URQLclient}>
         <Wrapper>
           <ToastContainer />
           <Dashboard />
         </Wrapper>
+      </URQLProvider>
       </Provider>
     </MuiThemeProvider>
   </ApolloProvider>
