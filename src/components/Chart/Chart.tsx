@@ -87,15 +87,20 @@ const Chart = React.memo(function Chart({ metrics, ...props }: any) {
           <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
           <Legend />
           {metrics &&
-            props.activeMetrics.map((metric: any, index: number) => (
-              <Line
-                type="monotone"
-                dot={false}
-                key={metric}
-                dataKey={metric}
-                stroke={props.colors[index] || 'orange'}
-              />
-            ))}
+            Object.keys(metrics).map((metric: any, index: number) => {
+              if (props.activeMetrics.indexOf(metric) === -1) {
+                return null;
+              }
+              return (
+                <Line
+                  type="monotone"
+                  dot={false}
+                  key={metric}
+                  dataKey={metric}
+                  stroke={props.colors[index] || 'orange'}
+                />
+              );
+            })}
         </LineChart>
       </ResponsiveContainer>
 
