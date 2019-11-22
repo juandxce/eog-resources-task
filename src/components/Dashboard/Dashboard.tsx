@@ -34,7 +34,7 @@ function Dashboard() {
     const { getMetrics } = data;
     dispatch(metricsActions.RECEIVED_METRICS_TAGS(getMetrics));
 
-    Promise.all(getMetrics.map((metric: any) => getLastKnownMeasurement(metric)))
+    Promise.all(getMetrics.map((metric: string) => getLastKnownMeasurement(metric)))
       .then((data: any) => {
         dispatch(metricsActions.RECEIVED_METRICS_LAST_MEASUREMENTS(data));
       })

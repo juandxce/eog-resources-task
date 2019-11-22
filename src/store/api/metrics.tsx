@@ -33,7 +33,7 @@ export const Client = new ApolloClient({
 });
 
 
-export const getLastKnownMeasurement = async (metricName: any) => {
+export const getLastKnownMeasurement = async (metricName: string) => {
   const params = {
     query: getLastKnownMeasurementQuery,
     variables: { metricName },

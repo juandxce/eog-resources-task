@@ -1,14 +1,21 @@
 import { createSlice, PayloadAction } from 'redux-starter-kit';
+import {KeyValuePairs} from './MetricsReducer';
 
-const initialState: any = {};
+const initialState: KeyValuePairs = {};
+
+export type Metric = {
+  metric: string;
+  value: number;
+};
+export type NewLatestValueAction = Metric;
 
 const slice = createSlice({
   name: 'chartData',
   initialState,
   reducers: {
-    SET_NEW_LATEST_VALUE: (state, action: PayloadAction<any>) => {
-      const metric: string = Object.keys(action.payload)[0]
-      state[metric] = action.payload[metric];
+    SET_NEW_LATEST_VALUE: (state, action: PayloadAction<Metric>) => {
+      const metric = action.payload.metric;
+      state[metric] = action.payload.value;
     },
   },
 });

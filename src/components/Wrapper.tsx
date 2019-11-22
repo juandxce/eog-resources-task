@@ -1,9 +1,19 @@
-import * as React from 'react';
+import React, { Component, ReactNode } from 'react';
 
-class Wrapper extends React.Component<any, any> {
-  constructor(props: any) {
+export type WrapperState = {
+  errorInfo?: {componentStack: string};
+  error?: any;
+}
+
+export type WrapperComponentProps = {
+  children: ReactNode;
+}
+
+
+class Wrapper extends Component<{}, WrapperState> {
+  constructor(props: WrapperComponentProps) {
     super(props);
-    this.state = { error: null, errorInfo: null };
+    this.state = { };
   }
 
   componentDidCatch(error: any, errorInfo: any) {

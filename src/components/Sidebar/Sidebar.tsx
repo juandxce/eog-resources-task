@@ -2,6 +2,8 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ToggleableChartIndicator from '../ToggleableChartIndicator';
 import { connect } from 'react-redux';
+import { KeyValuePairs, Metrics } from '../../store/reducers/MetricsReducer';
+import { IState } from '../../store';
 
 const useStyles = makeStyles({
   card: {
@@ -10,17 +12,25 @@ const useStyles = makeStyles({
   },
 });
 
-function Sidebar({ metrics, colors, latestMetricsValues, ...props}: any) {
+function Sidebar({
+  metrics,
+  colors,
+  latestMetricsValues,
+}: {
+  metrics: Metrics;
+  colors: Array<string>;
+  latestMetricsValues: KeyValuePairs;
+}) {
   const classes = useStyles();
 
   return (
     <div className={classes.card}>
-      {Object.keys(metrics).map((metric: any, index: number) => (
+      {Object.keys(metrics).map((metric: string, index: number) => (
         <ToggleableChartIndicator
           background={colors[index]}
           key={index}
           label={metric}
-          unit={metrics[metric].unit}
+          unit={metrics[metric].unit || ''}
           value={latestMetricsValues[metric]}
           active={metrics[metric].active}
         />
@@ -29,12 +39,12 @@ function Sidebar({ metrics, colors, latestMetricsValues, ...props}: any) {
   );
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: IState) => {
   return {
     metrics: state.metrics,
     colors: state.colors,
     latestMetricsValues: state.latestMetricsValues,
-    chartData: state.chartData
+    chartData: state.chartData,
   };
 };
 

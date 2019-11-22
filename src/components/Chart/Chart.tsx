@@ -10,9 +10,19 @@ import { getMultipleMeasurementsQuery } from '../../store/api/queries';
 import { useQuery } from 'urql';
 import { Subscription } from 'react-apollo';
 import { formatDateToTime } from '../../utils';
+import { IState } from '../../store';
+import { Metrics, KeyValuePairs } from '../../store/reducers/MetricsReducer';
+import { SubscriptionResult } from '@apollo/react-common';
+
+export type ChartProps = {
+  metrics: Metrics;
+  chartData: Array<KeyValuePairs>;
+  activeMetrics: Array<string>;
+  colors: Array<string>;
+};
 
 // render only if the 'at' properties are different
-const hasSameTime = (prevProps: any, nextProps: any) => {
+const hasSameTime = (prevProps: ChartProps, nextProps: ChartProps) => {
   let shouldNotRender = false;
   if (prevProps.chartData.length && nextProps.chartData.length) {
     const timeBefore = prevProps.chartData[prevProps.chartData.length - 1].at;
@@ -23,9 +33,10 @@ const hasSameTime = (prevProps: any, nextProps: any) => {
   return shouldNotRender;
 };
 
-const Chart = React.memo(function Chart({ metrics, ...props }: any) {
+const Chart = React.memo(function Chart({ metrics, chartData, activeMetrics, colors }: ChartProps) {
+
   const dispatch = useDispatch();
-  const data = props.chartData;
+  const data = chartData;
 
   const chartHeight = (window && window.innerHeight) || 600;
 
@@ -34,12 +45,12 @@ const Chart = React.memo(function Chart({ metrics, ...props }: any) {
   const after = now.getTime();
 
   const metricsToQuery = Object.keys(metrics)
-    .filter((metric: any) => metrics[metric].active)
-    .map((key: any) => ({
+    .filter((metric) => metrics[metric].active)
+    .map((key) => ({
       metricName: key,
       after,
     }));
-  const pause = !!props.chartData.length;
+  const pause = !!chartData.length;
 
   const [SR] = useQuery({
     query: getMultipleMeasurementsQuery,
@@ -58,10 +69,10 @@ const Chart = React.memo(function Chart({ metrics, ...props }: any) {
     if (!dataMM) return;
     const { getMultipleMeasurements } = dataMM;
 
-    const formattedData: any = [];
+    const formattedData: Array<KeyValuePairs> = [];
 
     for (let metric of getMultipleMeasurements) {
-      metric.measurements.forEach((measurement: any, i: number) => {
+      metric.measurements.forEach((measurement: {value: number; at: number}, i: number) => {
         if (!formattedData[i]) {
           formattedData[i] = {};
         }
@@ -85,8 +96,8 @@ const Chart = React.memo(function Chart({ metrics, ...props }: any) {
           <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
           <Legend />
           {metrics &&
-            Object.keys(metrics).map((metric: any, index: number) => {
-              if (props.activeMetrics.indexOf(metric) === -1) {
+            Object.keys(metrics).map((metric: string, index: number) => {
+              if (activeMetrics.indexOf(metric) === -1) {
                 return null;
               }
               return (
@@ -95,7 +106,7 @@ const Chart = React.memo(function Chart({ metrics, ...props }: any) {
                   dot={false}
                   key={metric}
                   dataKey={metric}
-                  stroke={props.colors[index] || 'orange'}
+                  stroke={colors[index] || 'orange'}
                 />
               );
             })}
@@ -104,7 +115,7 @@ const Chart = React.memo(function Chart({ metrics, ...props }: any) {
 
       {/* Handle the subscriptions incoming data */}
       <Subscription subscription={NewMeasurementSubscription}>
-        {({ error, data: newInfo }: any) => {
+        {({ error, data: newInfo }: SubscriptionResult) => {
           if (error) {
             dispatch(metricsActions.apiErrorReceived({ error: error.message }));
             return null;
@@ -120,7 +131,7 @@ const Chart = React.memo(function Chart({ metrics, ...props }: any) {
 
             if (!isActive || !hasData) return null;
             // update the latest value for that metric (only in toggleableIndicators)
-            dispatch(latestValuesActions.SET_NEW_LATEST_VALUE({ [measurementUpdate.metric]: measurementUpdate.value }));
+            dispatch(latestValuesActions.SET_NEW_LATEST_VALUE({ metric: measurementUpdate.metric, value: measurementUpdate.value }));
             if (haveSameTime && haveDifferentValues) {
               // update last chart points value
               dispatch(chartActions.UPDATED_METRIC_VALUE(measurementUpdate));
@@ -136,7 +147,7 @@ const Chart = React.memo(function Chart({ metrics, ...props }: any) {
   );
 }, hasSameTime);
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: IState) => {
   return {
     metrics: state.metrics,
     activeMetrics: getActiveMetrics(state),

@@ -33,7 +33,15 @@ const useStyles = makeStyles({
   },
 });
 
-export function ToggleableChartIndicator(props: any) {
+export type ToggleableChartIndicatorProps = {
+  background: string;
+  active: boolean;
+  label: string;
+  unit: string;
+  value: number;
+}
+
+export function ToggleableChartIndicator(props: ToggleableChartIndicatorProps) {
   const classes = useStyles();
   const dispatch = useDispatch();
   return (
