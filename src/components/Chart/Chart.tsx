@@ -13,23 +13,24 @@ import { Subscription } from 'react-apollo';
 import { addErrorMessage } from '../../utils';
 import { formatDateToTime } from '../../utils';
 
-function Chart({ metrics, ...props }: any) {
-  // shouldComponentUpdate(nextprops: any, nextState: any) {
-  //   const hasChartData = !!props.chartData[props.chartData.length - 1];
-  //   const receivedNewChartData = props.chartData.length !== nextprops.chartData.length;
-  //   const shouldComponentUpdate =
-  //     receivedNewChartData ||
-  //     (hasChartData &&
-  //       props.chartData[props.chartData.length - 1].at !==
-  //         nextprops.chartData[nextprops.chartData.length - 1].at);
-  //   return shouldComponentUpdate;
-  // }
+// render only if the 'at' properties are different
+const hasSameTime = (prevProps: any, nextProps: any) => {
+  let shouldNotRender = false;
+  if (prevProps.chartData.length && nextProps.chartData.length) {
+    const timeBefore = prevProps.chartData[prevProps.chartData.length - 1].at;
+    const timeAfter = nextProps.chartData[prevProps.chartData.length - 1].at;
+    shouldNotRender = timeBefore === timeAfter;
+  }
+
+  return shouldNotRender;
+};
+
+const Chart = React.memo(function Chart({ metrics, ...props }: any) {
   const dispatch = useDispatch();
   const data = props.chartData;
 
   const chartHeight = (window && window.innerHeight) || 600;
 
-  // move it to another component
   const now = new Date(); // get the time from 30 minutes ago
   now.setMinutes(now.getMinutes() - 30);
   const after = now.getTime();
@@ -41,7 +42,6 @@ function Chart({ metrics, ...props }: any) {
       after,
     }));
   const pause = !!props.chartData.length;
-  console.log('pause', pause);
 
   const [SR] = useQuery({
     query: getMultipleMeasurementsQuery,
@@ -50,9 +50,7 @@ function Chart({ metrics, ...props }: any) {
     },
     pause,
   });
-  console.log('SR', SR);
   const { data: dataMM, error: errorMM } = SR;
-  console.log('dataMM', { dataMM, errorMM });
 
   useEffect(() => {
     if (errorMM) {
@@ -66,7 +64,7 @@ function Chart({ metrics, ...props }: any) {
     const formattedData: any = [];
 
     for (let metric of getMultipleMeasurements) {
-      metric.measurements.map((measurement: any, i: number) => {
+      metric.measurements.forEach((measurement: any, i: number) => {
         if (!formattedData[i]) {
           formattedData[i] = {};
         }
@@ -76,6 +74,7 @@ function Chart({ metrics, ...props }: any) {
         }
       });
     }
+
     dispatch(chartActions.RECEIVED_CHART_METRICS(formattedData));
   }, [dispatch, dataMM, errorMM]);
 
@@ -102,7 +101,7 @@ function Chart({ metrics, ...props }: any) {
       </ResponsiveContainer>
 
       {/* Handle the subscriptions incoming data */}
-      {/* <Subscription subscription={NewMeasurementSubscription}>
+      <Subscription subscription={NewMeasurementSubscription}>
         {({ error, data: newInfo }: any) => {
           if (error) {
             addErrorMessage(error);
@@ -130,10 +129,10 @@ function Chart({ metrics, ...props }: any) {
           }
           return null;
         }}
-      </Subscription> */}
+      </Subscription>
     </div>
   );
-}
+}, hasSameTime);
 
 const mapStateToProps = (state: any) => {
   return {
