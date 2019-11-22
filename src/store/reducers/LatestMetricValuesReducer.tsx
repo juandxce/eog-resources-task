@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from 'redux-starter-kit';
 
-const initialState = {};
+const initialState: any = {};
 
 const slice = createSlice({
   name: 'chartData',
@@ -8,7 +8,8 @@ const slice = createSlice({
   reducers: {
     SET_NEW_LATEST_VALUE: (state, action: PayloadAction<any>) => {
       console.log('SETNEWLATESTVALUE', action.payload);
-      // state = action.payload;
+      const metric: string = Object.keys(action.payload)[0]
+      state[metric] = action.payload[metric];
     },
   },
 });
