@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from 'redux-starter-kit';
 
-export type ChartDataArrayType = Array<{[key: string]: number}>;
+export type ChartDataArrayType = Array<{ [key: string]: number }>;
 export type ChartReducerState = {
   data: ChartDataArrayType;
-}
-export type NewMeasurementValue = {at?: number; metric: string; value: number}
+};
+export type NewMeasurementValue = { at?: number; metric: string; value: number };
 
 const initialState: ChartReducerState = { data: [] };
 

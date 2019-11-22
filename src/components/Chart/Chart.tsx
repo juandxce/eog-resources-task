@@ -34,7 +34,6 @@ const hasSameTime = (prevProps: ChartProps, nextProps: ChartProps) => {
 };
 
 const Chart = React.memo(function Chart({ metrics, chartData, activeMetrics, colors }: ChartProps) {
-
   const dispatch = useDispatch();
   const data = chartData;
 
@@ -45,8 +44,8 @@ const Chart = React.memo(function Chart({ metrics, chartData, activeMetrics, col
   const after = now.getTime();
 
   const metricsToQuery = Object.keys(metrics)
-    .filter((metric) => metrics[metric].active)
-    .map((key) => ({
+    .filter(metric => metrics[metric].active)
+    .map(key => ({
       metricName: key,
       after,
     }));
@@ -72,7 +71,7 @@ const Chart = React.memo(function Chart({ metrics, chartData, activeMetrics, col
     const formattedData: Array<KeyValuePairs> = [];
 
     for (let metric of getMultipleMeasurements) {
-      metric.measurements.forEach((measurement: {value: number; at: number}, i: number) => {
+      metric.measurements.forEach((measurement: { value: number; at: number }, i: number) => {
         if (!formattedData[i]) {
           formattedData[i] = {};
         }
@@ -101,13 +100,7 @@ const Chart = React.memo(function Chart({ metrics, chartData, activeMetrics, col
                 return null;
               }
               return (
-                <Line
-                  type="monotone"
-                  dot={false}
-                  key={metric}
-                  dataKey={metric}
-                  stroke={colors[index] || 'orange'}
-                />
+                <Line type="monotone" dot={false} key={metric} dataKey={metric} stroke={colors[index] || 'orange'} />
               );
             })}
         </LineChart>
@@ -131,7 +124,12 @@ const Chart = React.memo(function Chart({ metrics, chartData, activeMetrics, col
 
             if (!isActive || !hasData) return null;
             // update the latest value for that metric (only in toggleableIndicators)
-            dispatch(latestValuesActions.SET_NEW_LATEST_VALUE({ metric: measurementUpdate.metric, value: measurementUpdate.value }));
+            dispatch(
+              latestValuesActions.SET_NEW_LATEST_VALUE({
+                metric: measurementUpdate.metric,
+                value: measurementUpdate.value,
+              }),
+            );
             if (haveSameTime && haveDifferentValues) {
               // update last chart points value
               dispatch(chartActions.UPDATED_METRIC_VALUE(measurementUpdate));

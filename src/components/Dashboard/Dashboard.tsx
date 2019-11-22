@@ -38,7 +38,7 @@ function Dashboard() {
       .then((data: any) => {
         dispatch(metricsActions.RECEIVED_METRICS_LAST_MEASUREMENTS(data));
       })
-      .catch((error) => {
+      .catch(error => {
         dispatch(metricsActions.apiErrorReceived({ error: error.message }));
       });
   }, [dispatch, data, error]);

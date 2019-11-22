@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from 'redux-starter-kit';
-import {KeyValuePairs} from './MetricsReducer';
+import { KeyValuePairs } from './MetricsReducer';
 
 const initialState: KeyValuePairs = {};
 

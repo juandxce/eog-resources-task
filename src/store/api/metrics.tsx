@@ -32,7 +32,6 @@ export const Client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-
 export const getLastKnownMeasurement = async (metricName: string) => {
   const params = {
     query: getLastKnownMeasurementQuery,
