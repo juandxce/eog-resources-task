@@ -59,7 +59,6 @@ const Chart = React.memo(function Chart({ metrics, ...props }: any) {
     }
     if (!dataMM) return;
     const { getMultipleMeasurements } = dataMM;
-    // console.log('MMD', dataMM);
 
     const formattedData: any = [];
 
