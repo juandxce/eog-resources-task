@@ -122,14 +122,18 @@ const Chart = React.memo(function Chart({ metrics, chartData, activeMetrics, col
             const haveSameTime = measurementUpdate.at === lastDataItem.at;
             const isActive = metrics[measurementUpdate.metric].active;
 
-            if (!isActive || !hasData) return null;
+            if (!hasData) return null;
+
             // update the latest value for that metric (only in toggleableIndicators)
-            dispatch(
-              latestValuesActions.SET_NEW_LATEST_VALUE({
-                metric: measurementUpdate.metric,
-                value: measurementUpdate.value,
-              }),
-            );
+            if (isActive) {
+              dispatch(
+                latestValuesActions.SET_NEW_LATEST_VALUE({
+                  metric: measurementUpdate.metric,
+                  value: measurementUpdate.value,
+                }),
+              );
+            }
+
             if (haveSameTime && haveDifferentValues) {
               // update last chart points value
               dispatch(chartActions.UPDATED_METRIC_VALUE(measurementUpdate));
