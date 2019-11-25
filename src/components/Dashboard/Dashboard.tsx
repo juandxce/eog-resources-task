@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Sidebar from '../Sidebar/Sidebar';
 import Chart from '../Chart/Chart';
-import { connect, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { getLastKnownMeasurement } from '../../store/api/metrics';
 import { actions as metricsActions } from '../../store/reducers/MetricsReducer';
 // stopped using it because of https://github.com/apollographql/react-apollo/issues/3270
@@ -51,6 +51,4 @@ function Dashboard() {
   );
 }
 
-const ConnectedDashboard = connect(null, null)(Dashboard);
-
-export default ConnectedDashboard;
+export default Dashboard;
