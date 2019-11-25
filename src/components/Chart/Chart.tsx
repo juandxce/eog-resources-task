@@ -51,14 +51,14 @@ const Chart = React.memo(function Chart({ metrics, chartData, activeMetrics, col
     }));
   const pause = !!chartData.length;
 
-  const [SR] = useQuery({
+  const [resultMM] = useQuery({
     query: getMultipleMeasurementsQuery,
     variables: {
       input: metricsToQuery,
     },
     pause,
   });
-  const { data: dataMM, error: errorMM } = SR;
+  const { data: dataMM, error: errorMM } = resultMM;
 
   useEffect(() => {
     if (errorMM) {
@@ -154,7 +154,7 @@ const mapStateToProps = (state: IState) => {
     metrics: state.metrics,
     activeMetrics: getActiveMetrics(state),
     colors: state.colors,
-    chartData: state.chartData.data,
+    chartData: state.chartData,
   };
 };
 
