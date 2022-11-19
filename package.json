@@ -20,7 +20,7 @@
     "react-debounce-render": "^5.0.0",
     "react-dom": "^16.11.0",
     "react-redux": "^7.1.1",
-    "react-scripts": "^3.2.0",
+    "react-scripts": "^5.0.1",
     "react-timeseries-charts": "^0.16.1",
     "react-toastify": "^5.4.0",
     "react-use": "^12.7.2",
